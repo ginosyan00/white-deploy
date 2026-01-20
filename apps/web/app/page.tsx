@@ -1,3 +1,7 @@
+// Prevent static generation - this page requires dynamic data
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
 import { HeroCarousel } from '../components/HeroCarousel';
 import { FeaturesSection } from '../components/FeaturesSection';
 import { TopCategories } from '../components/TopCategories';

@@ -1,3 +1,7 @@
+// Prevent static generation - this page requires dynamic data from API
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { Button } from '@shop/ui';
