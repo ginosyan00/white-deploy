@@ -1,0 +1,42 @@
+{
+  "notFound": {
+    "title": "Order Not Found",
+    "description": "The order you are looking for does not exist."
+  },
+  "title": "Order #{number}",
+  "placedOn": "Placed on {date}",
+  "orderStatus": {
+    "title": "Order Status",
+    "payment": "Payment: {status}",
+    "fulfillment": "Fulfillment: {status}"
+  },
+  "orderItems": {
+    "title": "Order Items"
+  },
+  "shippingAddress": {
+    "title": "Shipping Address",
+    "phone": "Phone: {phone}"
+  },
+  "orderSummary": {
+    "title": "Order Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "loadingTotals": "Loading totals..."
+  },
+  "buttons": {
+    "continueShopping": "Continue Shopping",
+    "viewCart": "View Cart"
+  },
+  "itemDetails": {
+    "color": "Color:",
+    "size": "Size:",
+    "sku": "SKU: {sku}",
+    "quantity": "Quantity: {qty} × {price} = {total}"
+  }
+}
+
+
+

@@ -1,0 +1,26 @@
+{
+  "title": "Welcome Back",
+  "subtitle": "Sign in to your account to continue",
+  "form": {
+    "emailOrPhone": "Email or Phone",
+    "emailOrPhonePlaceholder": "your@email.com or +374 XX XXX XXX",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign In",
+    "submitting": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  },
+  "errors": {
+    "emailOrPhoneRequired": "Please enter your email or phone number",
+    "passwordRequired": "Please enter your password",
+    "loginFailed": "Login failed. Please try again."
+  }
+}
+
+
+
+
+

@@ -1,0 +1,80 @@
+{
+  "title": "Customer Support",
+  "description": "We're here to help! Choose the best way to get in touch with us.",
+  "contactUs": {
+    "title": "Contact Us",
+    "email": "Email",
+    "phone": "Phone",
+    "businessHours": "Business Hours",
+    "hours": {
+      "weekdays": "Monday - Friday: 9:00 AM - 6:00 PM",
+      "saturday": "Saturday: 10:00 AM - 4:00 PM",
+      "sunday": "Sunday: Closed"
+    }
+  },
+  "quickLinks": {
+    "title": "Quick Links",
+    "faq": "Frequently Asked Questions →",
+    "delivery": "Delivery & Return Information →",
+    "returns": "Return Policy →",
+    "contact": "Contact Form →"
+  },
+  "sendMessage": {
+    "title": "Send us a Message",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What can we help you with?",
+      "message": "Message",
+      "messagePlaceholder": "Please describe your issue or question...",
+      "submit": "Send Message"
+    }
+  },
+  "commonTopics": {
+    "title": "Common Support Topics",
+    "orderIssues": {
+      "title": "Order Issues",
+      "items": {
+        "tracking": "Order tracking",
+        "cancellation": "Order cancellation",
+        "modification": "Order modification",
+        "missing": "Missing items"
+      }
+    },
+    "accountHelp": {
+      "title": "Account Help",
+      "items": {
+        "password": "Password reset",
+        "settings": "Account settings",
+        "history": "Order history",
+        "profile": "Profile updates"
+      }
+    },
+    "paymentBilling": {
+      "title": "Payment & Billing",
+      "items": {
+        "methods": "Payment methods",
+        "refund": "Refund status",
+        "billing": "Billing questions",
+        "issues": "Payment issues"
+      }
+    },
+    "productQuestions": {
+      "title": "Product Questions",
+      "items": {
+        "availability": "Product availability",
+        "specifications": "Product specifications",
+        "size": "Size guides",
+        "warranty": "Warranty information"
+      }
+    }
+  }
+}
+
+
+
+
+

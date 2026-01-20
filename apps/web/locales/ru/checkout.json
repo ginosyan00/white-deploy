@@ -1,0 +1,104 @@
+{
+  "title": "Оформление заказа",
+  "contactInformation": "Контактная информация",
+  "shippingMethod": "Способ доставки",
+  "shippingAddress": "Адрес доставки",
+  "paymentMethod": "Способ оплаты",
+  "orderSummary": "Итоги заказа",
+  "form": {
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Электронная почта",
+    "phone": "Телефон",
+    "address": "Адрес",
+    "city": "Город",
+    "postalCode": "Почтовый индекс",
+    "phoneNumber": "Номер телефона",
+    "cardNumber": "Номер карты",
+    "expiryDate": "Срок действия",
+    "cvv": "CVV",
+    "cardHolderName": "Имя держателя карты"
+  },
+  "placeholders": {
+    "phone": "+374XXXXXXXX",
+    "address": "Улица, квартира, офис и т.д.",
+    "city": "Город",
+    "postalCode": "Почтовый индекс",
+    "cardNumber": "1234 5678 9012 3456",
+    "expiryDate": "ММ/ГГ",
+    "cvv": "123",
+    "cardHolderName": "Иван Иванов"
+  },
+  "shipping": {
+    "storePickup": "Самовывоз",
+    "storePickupDescription": "Заберите ваш заказ из нашего магазина (Бесплатно)",
+    "delivery": "Доставка",
+    "deliveryDescription": "Мы доставим ваш заказ по вашему адресу",
+    "freePickup": "Бесплатно (Самовывоз)",
+    "loading": "Загрузка...",
+    "enterCity": "Введите город"
+  },
+  "payment": {
+    "cashOnDelivery": "Наложенный платеж",
+    "cashOnDeliveryDescription": "Оплатите наличными при получении заказа",
+    "idram": "Idram",
+    "idramDescription": "Оплатите кошельком Idram или картой",
+    "arca": "ArCa",
+    "arcaDescription": "Оплатите картой ArCa",
+    "paymentDetails": "Детали оплаты",
+    "enterCardDetails": "Введите данные вашей карты для завершения оплаты"
+  },
+  "summary": {
+    "items": "Товары",
+    "subtotal": "Промежуточный итог",
+    "shipping": "Доставка",
+    "tax": "Налог",
+    "total": "Итого"
+  },
+  "buttons": {
+    "placeOrder": "Оформить заказ",
+    "processing": "Обработка...",
+    "continueToPayment": "Перейти к оплате",
+    "continueShopping": "Продолжить покупки",
+    "cancel": "Отмена"
+  },
+  "modals": {
+    "completeOrder": "Завершите ваш заказ",
+    "confirmOrder": "Подтвердить заказ",
+    "cardDetails": "Данные карты {method}",
+    "closeModal": "Закрыть окно"
+  },
+  "messages": {
+    "cashOnDeliveryInfo": "Наложенный платеж: Вы заплатите наличными при получении заказа. Данные карты не требуются.",
+    "cashOnDeliveryPickup": "Наложенный платеж: Вы заплатите наличными при самовывозе заказа. Данные карты не требуются.",
+    "storePickupInfo": "Самовывоз: Вы заберете ваш заказ из нашего магазина. Доставка бесплатна."
+  },
+  "errors": {
+    "firstNameRequired": "Имя обязательно",
+    "lastNameRequired": "Фамилия обязательна",
+    "emailRequired": "Электронная почта обязательна",
+    "invalidEmail": "Неверный адрес электронной почты",
+    "phoneRequired": "Телефон обязателен",
+    "invalidPhone": "Неверный номер телефона",
+    "selectShippingMethod": "Пожалуйста, выберите способ доставки",
+    "selectPaymentMethod": "Пожалуйста, выберите способ оплаты",
+    "addressRequired": "Адрес обязателен для доставки",
+    "cityRequired": "Город обязателен для доставки",
+    "postalCodeRequired": "Почтовый индекс обязателен для доставки",
+    "phoneRequiredDelivery": "Номер телефона обязателен для доставки",
+    "invalidPhoneFormat": "Неверный формат номера телефона",
+    "cardNumberRequired": "Номер карты обязателен",
+    "cardExpiryRequired": "Срок действия карты обязателен",
+    "cvvRequired": "CVV обязателен",
+    "cardHolderNameRequired": "Имя держателя карты обязательно",
+    "fillShippingAddress": "Пожалуйста, заполните все поля адреса доставки",
+    "cartEmpty": "Корзина пуста",
+    "failedToLoadCart": "Не удалось загрузить корзину",
+    "failedToCreateOrder": "Не удалось создать заказ. Пожалуйста, попробуйте снова."
+  }
+}
+
+
+
+
+

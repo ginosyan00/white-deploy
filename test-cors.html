@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Render Backend CORS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #0070f3;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0051cc;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Render Backend CORS Test</h1>
+        <p>Ստուգեք, արդյոք <code>APP_URL</code>-ը ճիշտ է կարգավորված Render backend-ում:</p>
+        
+        <div class="input-group">
+            <label for="backendUrl">Render Backend URL:</label>
+            <input type="text" id="backendUrl" placeholder="https://your-backend-name.onrender.com" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="frontendUrl">Frontend URL (Vercel):</label>
+            <input type="text" id="frontendUrl" value="https://white-shop-web-dhzt.vercel.app" readonly>
+        </div>
+        
+        <button onclick="testCORS()">🧪 Ստուգել CORS</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        async function testCORS() {
+            const backendUrl = document.getElementById('backendUrl').value.trim();
+            const frontendUrl = document.getElementById('frontendUrl').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!backendUrl) {
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '❌ Խնդրում ենք մուտքագրել Render Backend URL-ը';
+                return;
+            }
+            
+            resultDiv.className = 'result info';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '⏳ Ստուգում...';
+            
+            try {
+                // Test 1: Health Check
+                const healthResponse = await fetch(`${backendUrl}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': frontendUrl
+                    }
+                });
+                
+                const corsHeader = healthResponse.headers.get('access-control-allow-origin');
+                const corsCredentials = healthResponse.headers.get('access-control-allow-credentials');
+                const healthData = await healthResponse.json();
+                
+                let html = '<h3>📊 Ստուգման արդյունքներ:</h3>';
+                
+                // Health Check Result
+                html += '<h4>1️⃣ Health Check:</h4>';
+                if (healthResponse.ok) {
+                    html += '<p>✅ Backend-ը աշխատում է</p>';
+                    html += `<pre>${JSON.stringify(healthData, null, 2)}</pre>`;
+                } else {
+                    html += `<p>❌ Backend-ը չի աշխատում (Status: ${healthResponse.status})</p>`;
+                }
+                
+                // CORS Check Result
+                html += '<h4>2️⃣ CORS Configuration:</h4>';
+                html += `<p><strong>Access-Control-Allow-Origin:</strong> ${corsHeader || 'NOT SET'}</p>`;
+                html += `<p><strong>Access-Control-Allow-Credentials:</strong> ${corsCredentials || 'NOT SET'}</p>`;
+                html += `<p><strong>Expected Origin:</strong> ${frontendUrl}</p>`;
+                
+                if (corsHeader === frontendUrl) {
+                    html += '<p style="color: green; font-weight: bold;">✅ SUCCESS: APP_URL is correctly configured!</p>';
+                    html += '<p style="color: green;">Frontend-ը կարող է կապվել backend-ի հետ</p>';
+                    resultDiv.className = 'result success';
+                } else if (corsHeader === '*') {
+                    html += '<p style="color: orange; font-weight: bold;">⚠️ WARNING: CORS allows all origins (*)</p>';
+                    html += '<p>Սա աշխատում է, բայց ավելի անվտանգ է սահմանափակել մեկ origin-ով</p>';
+                    resultDiv.className = 'result info';
+                } else if (corsHeader) {
+                    html += '<p style="color: red; font-weight: bold;">❌ FAIL: CORS is configured for different origin</p>';
+                    html += `<p>Սահմանված է: <code>${corsHeader}</code></p>`;
+                    html += `<p>Պետք է լինի: <code>${frontendUrl}</code></p>`;
+                    html += '<p><strong>Լուծում:</strong> Render Dashboard-ում ավելացրեք <code>APP_URL=' + frontendUrl + '</code></p>';
+                    resultDiv.className = 'result error';
+                } else {
+                    html += '<p style="color: red; font-weight: bold;">❌ FAIL: CORS headers not found</p>';
+                    html += '<p><strong>Լուծում:</strong> Render Dashboard-ում ավելացրեք <code>APP_URL=' + frontendUrl + '</code></p>';
+                    resultDiv.className = 'result error';
+                }
+                
+                // Test API Endpoint
+                html += '<h4>3️⃣ API Endpoint Test:</h4>';
+                try {
+                    const apiResponse = await fetch(`${backendUrl}/api/v1/products?limit=1`, {
+                        method: 'GET',
+                        headers: {
+                            'Origin': frontendUrl
+                        }
+                    });
+                    
+                    if (apiResponse.ok || apiResponse.status === 401) {
+                        html += `<p>✅ API endpoint is accessible (Status: ${apiResponse.status})</p>`;
+                    } else {
+                        html += `<p>⚠️ API endpoint returned: ${apiResponse.status}</p>`;
+                    }
+                } catch (apiError) {
+                    html += `<p>❌ API endpoint error: ${apiError.message}</p>`;
+                }
+                
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Սխալ:</h3>
+                    <p>${error.message}</p>
+                    <p><strong>Հնարավոր պատճառներ:</strong></p>
+                    <ul>
+                        <li>Backend URL-ը սխալ է</li>
+                        <li>Backend-ը չի աշխատում</li>
+                        <li>CORS-ը չի կարգավորված</li>
+                    </ul>
+                    <p><strong>Լուծում:</strong> Ստուգեք Render Dashboard-ում, արդյոք service-ը աշխատում է և <code>APP_URL</code>-ը ավելացված է</p>
+                `;
+            }
+        }
+        
+        // Auto-fill backend URL if available in localStorage
+        window.onload = function() {
+            const savedUrl = localStorage.getItem('renderBackendUrl');
+            if (savedUrl) {
+                document.getElementById('backendUrl').value = savedUrl;
+            }
+        };
+        
+        // Save backend URL
+        document.getElementById('backendUrl').addEventListener('change', function() {
+            localStorage.setItem('renderBackendUrl', this.value);
+        });
+    </script>
+</body>
+</html>
+
+

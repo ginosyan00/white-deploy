@@ -1,0 +1,43 @@
+{
+  "title": "Create Account",
+  "subtitle": "Sign up to get started with your shopping journey",
+  "form": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone (optional if email provided)",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "acceptTerms": "I agree to the",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "placeholders": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "your@email.com",
+    "phone": "+374 XX XXX XXX",
+    "password": "••••••••",
+    "confirmPassword": "••••••••"
+  },
+  "errors": {
+    "acceptTerms": "Please accept the Terms of Service and Privacy Policy",
+    "mustAcceptTerms": "You must accept the terms to continue",
+    "emailOrPhoneRequired": "Please provide either email or phone number",
+    "passwordRequired": "Please enter a password",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "registrationFailed": "Registration failed. Please try again."
+  },
+  "passwordHint": "Must be at least 6 characters"
+}
+
+
+
+
+

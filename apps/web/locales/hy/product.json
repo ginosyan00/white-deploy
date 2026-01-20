@@ -1,0 +1,31 @@
+{
+  "details_title": "Ապրանքի մանրամասներ",
+  "related_products_title": "Նմանատիպ ապրանքներ",
+  "reviews_title": "Կարծիքներ",
+  "specifications_title": "Տեխնիկական բնութագրեր",
+  "description_title": "Նկարագրություն",
+  "color": "Գույն",
+  "size": "Չափ",
+  "quantity": "Քանակ",
+  "addToCart": "Ավելացնել զամբյուղ",
+  "outOfStock": "Արտադրված",
+  "selectColor": "Խնդրում ենք ընտրել գույն",
+  "selectSize": "Խնդրում ենք ընտրել չափ",
+  "selectColorAndSize": "Խնդրում ենք ընտրել գույն և չափ",
+  "selectOptions": "Ընտրել ընտրանքներ",
+  "adding": "Ավելացվում է...",
+  "addedToCart": "Ավելացվեց զամբյուղ",
+  "addedToWishlist": "Ավելացվեց ցանկությունների ցուցակ",
+  "removedFromWishlist": "Հեռացվեց ցանկությունների ցուցակից",
+  "addedToCompare": "Ավելացվեց համեմատման ցուցակ",
+  "removedFromCompare": "Հեռացվեց համեմատման ցուցակից",
+  "compareListFull": "Համեմատման ցուցակը լի է",
+  "errorAddingToCart": "Սխալ ավելացնելիս",
+  "pcs": "հատ",
+  "outOfStockLabel": "Արտադրված",
+  "noRelatedProducts": "Նմանատիպ ապրանքներ չգտնվեցին"
+}
+
+
+
+

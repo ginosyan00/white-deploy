@@ -1,0 +1,84 @@
+{
+  "title": "Terms of Service",
+  "lastUpdated": "Last updated:",
+  "agreementToTerms": {
+    "title": "Agreement to Terms",
+    "description1": "By accessing or using our website, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.",
+    "description2": "The materials contained in this website are protected by applicable copyright and trademark law."
+  },
+  "useLicense": {
+    "title": "Use License",
+    "description": "Permission is granted to temporarily download one copy of the materials on our website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:",
+    "restrictions": {
+      "modify": "Modify or copy the materials",
+      "commercial": "Use the materials for any commercial purpose or for any public display",
+      "reverse": "Attempt to reverse engineer any software contained on the website",
+      "copyright": "Remove any copyright or other proprietary notations from the materials",
+      "transfer": "Transfer the materials to another person or \"mirror\" the materials on any other server"
+    }
+  },
+  "accountRegistration": {
+    "title": "Account Registration",
+    "description": "To access certain features of our website, you may be required to register for an account. When you register, you agree to:",
+    "requirements": {
+      "accurate": "Provide accurate, current, and complete information",
+      "maintain": "Maintain and update your information to keep it accurate",
+      "security": "Maintain the security of your password and identification",
+      "responsibility": "Accept all responsibility for activities that occur under your account",
+      "notify": "Notify us immediately of any unauthorized use of your account"
+    }
+  },
+  "productInformation": {
+    "title": "Product Information",
+    "description1": "We strive to provide accurate product descriptions, images, and pricing. However, we do not warrant that product descriptions or other content on this site is accurate, complete, reliable, current, or error-free.",
+    "description2": "If a product offered by us is not as described, your sole remedy is to return it in unused condition."
+  },
+  "pricingAndPayment": {
+    "title": "Pricing and Payment",
+    "description1": "All prices are displayed in the currency selected and are subject to change without notice. We reserve the right to modify prices at any time.",
+    "description2": "Payment must be received before we ship your order. We accept various payment methods as indicated during checkout.",
+    "description3": "All sales are final unless otherwise stated. Refunds are subject to our return policy."
+  },
+  "shippingAndDelivery": {
+    "title": "Shipping and Delivery",
+    "description1": "We will make every effort to ship your order within the timeframes specified. However, shipping times are estimates and not guaranteed.",
+    "description2": "Risk of loss and title for products purchased from us pass to you upon delivery to the carrier. You are responsible for filing any claims with carriers for damaged or lost shipments."
+  },
+  "returnsAndRefunds": {
+    "title": "Returns and Refunds",
+    "description1": "Our return policy is detailed on our Returns page. By making a purchase, you agree to our return policy.",
+    "description2": "We reserve the right to refuse returns that do not meet our return policy requirements."
+  },
+  "prohibitedUses": {
+    "title": "Prohibited Uses",
+    "description": "You may not use our website:",
+    "items": {
+      "violate": "In any way that violates any applicable law or regulation",
+      "transmit": "To transmit any material that is abusive, harassing, or otherwise objectionable",
+      "impersonate": "To impersonate or attempt to impersonate the company or any employee",
+      "infringe": "In any way that infringes upon the rights of others",
+      "automated": "To engage in any automated use of the system"
+    }
+  },
+  "limitationOfLiability": {
+    "title": "Limitation of Liability",
+    "description": "In no event shall White-Shop or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website, even if we or an authorized representative has been notified orally or in writing of the possibility of such damage."
+  },
+  "revisionsAndErrata": {
+    "title": "Revisions and Errata",
+    "description": "The materials appearing on our website could include technical, typographical, or photographic errors. We do not warrant that any of the materials on its website are accurate, complete, or current. We may make changes to the materials contained on its website at any time without notice."
+  },
+  "governingLaw": {
+    "title": "Governing Law",
+    "description": "These terms and conditions are governed by and construed in accordance with applicable laws. Any disputes relating to these terms shall be subject to the exclusive jurisdiction of the courts in the jurisdiction where our business is located."
+  },
+  "contactInformation": {
+    "title": "Contact Information",
+    "description": "If you have any questions about these Terms of Service, please contact us at:"
+  }
+}
+
+
+
+
+

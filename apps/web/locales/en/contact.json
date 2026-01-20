@@ -1,0 +1,34 @@
+{
+  "callToUs": {
+    "title": "Call to Us:",
+    "description": "We're available 24/7, 7 days a week."
+  },
+  "writeToUs": {
+    "title": "Write to Us:",
+    "description": "Fill out our form and we will contact you within 24 hours.",
+    "emailLabel": "Email:"
+  },
+  "headquarter": {
+    "title": "Headquarter:",
+    "hours": {
+      "weekdays": "Monday - Friday: 9:00-20:00",
+      "saturday": "Saturday: 11:00 - 15:00"
+    }
+  },
+  "form": {
+    "name": "Name *",
+    "namePlaceholder": "Your name",
+    "email": "E-mail *",
+    "emailPlaceholder": "your@email.com",
+    "subject": "Subject *",
+    "subjectPlaceholder": "What is this about?",
+    "message": "Message",
+    "messagePlaceholder": "Your message...",
+    "submit": "Submit"
+  }
+}
+
+
+
+
+

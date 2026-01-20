@@ -1,0 +1,29 @@
+{
+  "hero_title": "Welcome to Shop",
+  "hero_subtitle": "Discover amazing products and exclusive deals. Shop the latest trends and find everything you need in one place.",
+  "hero_button_products": "PRODUCTS",
+  "hero_button_view_more": "VIEW MORE",
+  "features_title": "We Provide High Quality Goods",
+  "features_subtitle": "A client that's unhappy for a reason is a problem, a client that's unhappy though he or her can't",
+  "feature_fast_delivery_title": "Fast Delivery",
+  "feature_fast_delivery_description": "Chances are there wasn't collaboration and checkpoints, there wasn't a process.",
+  "feature_best_quality_title": "Best Quality",
+  "feature_best_quality_description": "It's content strategy gone awry right from the start. Forswearing the use of Lorem Ipsum.",
+  "feature_free_return_title": "Free Return",
+  "feature_free_return_description": "True enough, but that's not all that it takes to get things back on track out there for a text.",
+  "featured_products": {
+    "title": "Featured Products",
+    "subtitle": "Three quick picks: New arrivals, Bestsellers, and Featured picks",
+    "tab_new": "NEW",
+    "tab_bestseller": "BESTSELLER",
+    "tab_featured": "FEATURED",
+    "ariaShowProducts": "Show {label} products",
+    "errorLoading": "Failed to load products",
+    "tryAgain": "Try Again",
+    "noProducts": "No products available in this category."
+  }
+}
+
+
+
+

@@ -1,0 +1,64 @@
+{
+  "filters": {
+    "price": {
+      "title": "Զտել ըստ գնի",
+      "priceLabel": "Գին:"
+    },
+    "color": {
+      "title": "Զտել ըստ գույնի",
+      "noColors": "Գույներ չկան",
+      "loading": "Բեռնվում է..."
+    },
+    "size": {
+      "title": "Զտել ըստ չափի",
+      "noSizes": "Չափեր չկան",
+      "loading": "Բեռնվում է..."
+    },
+    "brand": {
+      "title": "Զտել ըստ բրենդի",
+      "searchPlaceholder": "Գտնել բրենդ",
+      "noBrands": "Բրենդներ չգտնվեցին",
+      "loading": "Բեռնվում է..."
+    }
+  },
+  "header": {
+    "allProducts": "Բոլոր ապրանքները ({total})",
+    "clearFilters": "Մաքրել ֆիլտրերը",
+    "show": "Ցուցադրել",
+    "all": "Բոլորը",
+    "sort": {
+      "default": "Լռելյայն դասավորություն",
+      "priceAsc": "Գին: ցածրից բարձր",
+      "priceDesc": "Գին: բարձրից ցածր",
+      "nameAsc": "Անվանում: Ա-ից Զ",
+      "nameDesc": "Անվանում: Զ-ից Ա"
+    },
+    "viewModes": {
+      "list": "Ցուցակի տեսք",
+      "grid2": "Ցանցի տեսք 2x2",
+      "grid3": "Ցանցի տեսք 3x3"
+    },
+    "filters": "Ֆիլտրեր",
+    "sortProducts": "Դասավորել ապրանքները"
+  },
+  "grid": {
+    "noProducts": "Ապրանքներ չգտնվեցին։"
+  },
+  "mobileFilters": {
+    "title": "Ֆիլտրեր",
+    "close": "Փակել ֆիլտրերը"
+  },
+  "categoryNavigation": {
+    "all": "Բոլորը",
+    "shopAll": "Բոլոր ապրանքները",
+    "newArrivals": "Նոր ապրանքներ",
+    "sale": "Զեղչ",
+    "labels": {
+      "all": "ԲՈԼՈՐ",
+      "new": "ՆՈՐ",
+      "sale": "ԶԵՂՉ"
+    },
+    "scrollLeft": "Ոլորել կատեգորիաները ձախ",
+    "scrollRight": "Ոլորել կատեգորիաները աջ"
+  }
+}

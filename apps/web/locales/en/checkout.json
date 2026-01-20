@@ -1,0 +1,104 @@
+{
+  "title": "Checkout",
+  "contactInformation": "Contact Information",
+  "shippingMethod": "Shipping Method",
+  "shippingAddress": "Shipping Address",
+  "paymentMethod": "Payment Method",
+  "orderSummary": "Order Summary",
+  "form": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "postalCode": "Postal Code",
+    "phoneNumber": "Phone Number",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "cardHolderName": "Card Holder Name"
+  },
+  "placeholders": {
+    "phone": "+374XXXXXXXX",
+    "address": "Street address, apartment, suite, etc.",
+    "city": "City",
+    "postalCode": "Postal code",
+    "cardNumber": "1234 5678 9012 3456",
+    "expiryDate": "MM/YY",
+    "cvv": "123",
+    "cardHolderName": "John Doe"
+  },
+  "shipping": {
+    "storePickup": "Store Pickup",
+    "storePickupDescription": "Pick up your order from our store (Free)",
+    "delivery": "Delivery",
+    "deliveryDescription": "We'll deliver your order to your address",
+    "freePickup": "Free (Pickup)",
+    "loading": "Loading...",
+    "enterCity": "Enter city"
+  },
+  "payment": {
+    "cashOnDelivery": "Cash on Delivery",
+    "cashOnDeliveryDescription": "Pay with cash when you receive your order",
+    "idram": "Idram",
+    "idramDescription": "Pay with Idram wallet or card",
+    "arca": "ArCa",
+    "arcaDescription": "Pay with ArCa card",
+    "paymentDetails": "Payment Details",
+    "enterCardDetails": "Enter your card details to complete the payment"
+  },
+  "summary": {
+    "items": "Items",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total"
+  },
+  "buttons": {
+    "placeOrder": "Place Order",
+    "processing": "Processing...",
+    "continueToPayment": "Continue to Payment",
+    "continueShopping": "Continue Shopping",
+    "cancel": "Cancel"
+  },
+  "modals": {
+    "completeOrder": "Complete Your Order",
+    "confirmOrder": "Confirm Order",
+    "cardDetails": "{method} Card Details",
+    "closeModal": "Close modal"
+  },
+  "messages": {
+    "cashOnDeliveryInfo": "Cash on Delivery: You will pay with cash when you receive your order. No card details required.",
+    "cashOnDeliveryPickup": "Cash on Delivery: You will pay with cash when you pick up your order. No card details required.",
+    "storePickupInfo": "Store Pickup: You will pick up your order from our store. Shipping is free."
+  },
+  "errors": {
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Invalid email address",
+    "phoneRequired": "Phone is required",
+    "invalidPhone": "Invalid phone number",
+    "selectShippingMethod": "Please select a shipping method",
+    "selectPaymentMethod": "Please select a payment method",
+    "addressRequired": "Address is required for delivery",
+    "cityRequired": "City is required for delivery",
+    "postalCodeRequired": "Postal code is required for delivery",
+    "phoneRequiredDelivery": "Phone number is required for delivery",
+    "invalidPhoneFormat": "Invalid phone number format",
+    "cardNumberRequired": "Card number is required",
+    "cardExpiryRequired": "Card expiry date is required",
+    "cvvRequired": "CVV is required",
+    "cardHolderNameRequired": "Cardholder name is required",
+    "fillShippingAddress": "Please fill in all shipping address fields",
+    "cartEmpty": "Cart is empty",
+    "failedToLoadCart": "Failed to load cart",
+    "failedToCreateOrder": "Failed to create order. Please try again."
+  }
+}
+
+
+
+
+

@@ -1,0 +1,11 @@
+{
+  "name": "@whiteshop/apps-shell",
+  "private": true,
+  "description": "Helper package to proxy dev scripts when working inside the apps/ directory",
+  "scripts": {
+    "dev": "npm --prefix .. run dev",
+    "dev:web": "npm --prefix .. run dev:web",
+    "dev:api": "npm --prefix .. run dev:api"
+  }
+}
+

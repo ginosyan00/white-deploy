@@ -1,0 +1,39 @@
+{
+  "title": "Ստեղծել հաշիվ",
+  "subtitle": "Գրանցվեք՝ ձեր գնումների ճանապարհորդությունը սկսելու համար",
+  "form": {
+    "firstName": "Անուն",
+    "lastName": "Ազգանուն",
+    "email": "Էլ. փոստ",
+    "phone": "Հեռախոս (ընտրովի, եթե նշված է էլ. փոստ)",
+    "password": "Գաղտնաբառ",
+    "confirmPassword": "Հաստատել գաղտնաբառը",
+    "acceptTerms": "Ես համաձայն եմ",
+    "termsOfService": "Ծառայությունների պայմաններ",
+    "and": "և",
+    "privacyPolicy": "Գաղտնիության քաղաքականություն",
+    "createAccount": "Ստեղծել հաշիվ",
+    "creatingAccount": "Ստեղծվում է հաշիվ...",
+    "alreadyHaveAccount": "Արդեն ունե՞ք հաշիվ",
+    "signIn": "Մուտք գործել"
+  },
+  "placeholders": {
+    "firstName": "Արամ",
+    "lastName": "Պետրոսյան",
+    "email": "your@email.com",
+    "phone": "+374 XX XXX XXX",
+    "password": "••••••••",
+    "confirmPassword": "••••••••"
+  },
+  "errors": {
+    "acceptTerms": "Խնդրում ենք ընդունել Ծառայությունների պայմանները և Գաղտնիության քաղաքականությունը",
+    "mustAcceptTerms": "Դուք պետք է ընդունեք պայմանները՝ շարունակելու համար",
+    "emailOrPhoneRequired": "Խնդրում ենք նշել էլ. փոստ կամ հեռախոսահամար",
+    "passwordRequired": "Խնդրում ենք մուտքագրել գաղտնաբառ",
+    "passwordMinLength": "Գաղտնաբառը պետք է լինի առնվազն 6 նիշ",
+    "passwordsDoNotMatch": "Գաղտնաբառերը չեն համընկնում",
+    "registrationFailed": "Գրանցումը ձախողվեց: Խնդրում ենք կրկին փորձել:"
+  },
+  "passwordHint": "Պետք է լինի առնվազն 6 նիշ"
+}
+

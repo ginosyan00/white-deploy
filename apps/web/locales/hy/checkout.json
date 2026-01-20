@@ -1,0 +1,100 @@
+{
+  "title": "Վճարում",
+  "contactInformation": "Կոնտակտային տեղեկատվություն",
+  "shippingMethod": "Առաքման եղանակ",
+  "shippingAddress": "Առաքման հասցե",
+  "paymentMethod": "Վճարման եղանակ",
+  "orderSummary": "Պատվերի ամփոփում",
+  "form": {
+    "firstName": "Անուն",
+    "lastName": "Ազգանուն",
+    "email": "Էլ. փոստ",
+    "phone": "Հեռախոս",
+    "address": "Հասցե",
+    "city": "Քաղաք",
+    "postalCode": "Փոստային կոդ",
+    "phoneNumber": "Հեռախոսահամար",
+    "cardNumber": "Քարտի համար",
+    "expiryDate": "Վավերականության ժամկետ",
+    "cvv": "CVV",
+    "cardHolderName": "Քարտի տիրոջ անուն"
+  },
+  "placeholders": {
+    "phone": "+374XXXXXXXX",
+    "address": "Փողոց, բնակարան, սենյակ և այլն",
+    "city": "Քաղաք",
+    "postalCode": "Փոստային կոդ",
+    "cardNumber": "1234 5678 9012 3456",
+    "expiryDate": "ԱԱ/ՏՏ",
+    "cvv": "123",
+    "cardHolderName": "Արամ Պետրոսյան"
+  },
+  "shipping": {
+    "storePickup": "Խանութից վերցնել",
+    "storePickupDescription": "Վերցրեք ձեր պատվերը մեր խանութից (Անվճար)",
+    "delivery": "Առաքում",
+    "deliveryDescription": "Մենք կառաքենք ձեր պատվերը ձեր հասցեին",
+    "freePickup": "Անվճար (Խանութից)",
+    "loading": "Բեռնվում է...",
+    "enterCity": "Մուտքագրել քաղաք"
+  },
+  "payment": {
+    "cashOnDelivery": "Կանխիկ առաքման ժամանակ",
+    "cashOnDeliveryDescription": "Վճարեք կանխիկ, երբ ստանաք ձեր պատվերը",
+    "idram": "Idram",
+    "idramDescription": "Վճարեք Idram դրամապանակով կամ քարտով",
+    "arca": "ArCa",
+    "arcaDescription": "Վճարեք ArCa քարտով",
+    "paymentDetails": "Վճարման մանրամասներ",
+    "enterCardDetails": "Մուտքագրեք ձեր քարտի տվյալները՝ վճարումն ավարտելու համար"
+  },
+  "summary": {
+    "items": "Ապրանքներ",
+    "subtotal": "Ենթագումար",
+    "shipping": "Առաքում",
+    "tax": "Հարկ",
+    "total": "Ընդամենը"
+  },
+  "buttons": {
+    "placeOrder": "Պատվիրել",
+    "processing": "Մշակվում է...",
+    "continueToPayment": "Անցնել վճարման",
+    "continueShopping": "Շարունակել գնումները",
+    "cancel": "Չեղարկել"
+  },
+  "modals": {
+    "completeOrder": "Ավարտել ձեր պատվերը",
+    "confirmOrder": "Հաստատել պատվերը",
+    "cardDetails": "{method} քարտի տվյալներ",
+    "closeModal": "Փակել պատուհանը"
+  },
+  "messages": {
+    "cashOnDeliveryInfo": "Կանխիկ առաքման ժամանակ: Դուք կվճարեք կանխիկ, երբ ստանաք ձեր պատվերը: Քարտի տվյալներ չեն պահանջվում:",
+    "cashOnDeliveryPickup": "Կանխիկ առաքման ժամանակ: Դուք կվճարեք կանխիկ, երբ վերցնեք ձեր պատվերը: Քարտի տվյալներ չեն պահանջվում:",
+    "storePickupInfo": "Խանութից վերցնել: Դուք կվերցնեք ձեր պատվերը մեր խանութից: Առաքումն անվճար է:"
+  },
+  "errors": {
+    "firstNameRequired": "Անունը պարտադիր է",
+    "lastNameRequired": "Ազգանունը պարտադիր է",
+    "emailRequired": "Էլ. փոստը պարտադիր է",
+    "invalidEmail": "Անվավեր էլ. փոստ",
+    "phoneRequired": "Հեռախոսը պարտադիր է",
+    "invalidPhone": "Անվավեր հեռախոսահամար",
+    "selectShippingMethod": "Խնդրում ենք ընտրել առաքման եղանակ",
+    "selectPaymentMethod": "Խնդրում ենք ընտրել վճարման եղանակ",
+    "addressRequired": "Հասցեն պարտադիր է առաքման համար",
+    "cityRequired": "Քաղաքը պարտադիր է առաքման համար",
+    "postalCodeRequired": "Փոստային կոդը պարտադիր է առաքման համար",
+    "phoneRequiredDelivery": "Հեռախոսահամարը պարտադիր է առաքման համար",
+    "invalidPhoneFormat": "Անվավեր հեռախոսահամարի ձևաչափ",
+    "cardNumberRequired": "Քարտի համարը պարտադիր է",
+    "cardExpiryRequired": "Քարտի վավերականության ժամկետը պարտադիր է",
+    "cvvRequired": "CVV-ն պարտադիր է",
+    "cardHolderNameRequired": "Քարտի տիրոջ անունը պարտադիր է",
+    "fillShippingAddress": "Խնդրում ենք լրացնել բոլոր առաքման հասցեի դաշտերը",
+    "cartEmpty": "Զամբյուղը դատարկ է",
+    "failedToLoadCart": "Չհաջողվեց բեռնել զամբյուղը",
+    "failedToCreateOrder": "Չհաջողվեց ստեղծել պատվերը: Խնդրում ենք կրկին փորձել:"
+  }
+}
+

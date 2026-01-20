@@ -1,0 +1,40 @@
+{
+  "color": {
+    "red": "Red",
+    "blue": "Blue",
+    "green": "Green",
+    "yellow": "Yellow",
+    "black": "Black",
+    "white": "White",
+    "gray": "Gray",
+    "grey": "Gray",
+    "brown": "Brown",
+    "orange": "Orange",
+    "pink": "Pink",
+    "purple": "Purple",
+    "navy": "Navy",
+    "beige": "Beige",
+    "maroon": "Maroon",
+    "olive": "Olive",
+    "teal": "Teal",
+    "cyan": "Cyan",
+    "magenta": "Magenta",
+    "lime": "Lime",
+    "silver": "Silver",
+    "gold": "Gold"
+  },
+  "size": {
+    "xs": "XS",
+    "s": "S",
+    "m": "M",
+    "l": "L",
+    "xl": "XL",
+    "xxl": "XXL",
+    "xxxl": "XXXL"
+  }
+}
+
+
+
+
+

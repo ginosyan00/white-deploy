@@ -1,0 +1,148 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Card } from '@shop/ui';
+import { apiClient } from '../lib/api-client';
+import { getStoredLanguage } from '../lib/language';
+import { useTranslation } from '../lib/i18n-client';
+
+interface SizeFilterProps {
+  category?: string;
+  search?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  selectedSizes?: string[];
+}
+
+interface SizeOption {
+  value: string;
+  count: number;
+}
+
+
+export function SizeFilter({ category, search, minPrice, maxPrice, selectedSizes = [] }: SizeFilterProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { t } = useTranslation();
+  const [sizes, setSizes] = useState<SizeOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<string[]>(selectedSizes);
+
+  useEffect(() => {
+    fetchSizes();
+  }, [category, search, minPrice, maxPrice]);
+
+  useEffect(() => {
+    setSelected(selectedSizes);
+  }, [selectedSizes]);
+
+  const fetchSizes = async () => {
+    try {
+      setLoading(true);
+      const language = getStoredLanguage();
+      const params: Record<string, string> = {
+        lang: language,
+      };
+      
+      if (category) params.category = category;
+      if (search) params.search = search;
+      if (minPrice) params.minPrice = minPrice;
+      if (maxPrice) params.maxPrice = maxPrice;
+
+      // Fetch filters from API
+      const response = await apiClient.get<{ colors: any[]; sizes: SizeOption[] }>('/api/v1/products/filters', { params });
+      
+      console.log('[SizeFilter] Filters response:', response.sizes?.length, 'sizes');
+      
+      setSizes(response.sizes || []);
+    } catch (error) {
+      console.error('Error fetching sizes:', error);
+      setSizes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSizeToggle = (sizeValue: string) => {
+    const newSelected = selected.includes(sizeValue)
+      ? selected.filter((s) => s !== sizeValue)
+      : [...selected, sizeValue];
+
+    setSelected(newSelected);
+    applyFilters(newSelected);
+  };
+
+  const applyFilters = (sizesToApply: string[]) => {
+    // Ստեղծում ենք նոր URLSearchParams URL-ի հիման վրա, որպեսզի պահպանենք բոլոր params-ները
+    const params = new URLSearchParams(searchParams.toString());
+    
+    // Թարմացնում ենք sizes պարամետրը
+    if (sizesToApply.length > 0) {
+      params.set('sizes', sizesToApply.join(','));
+    } else {
+      params.delete('sizes');
+    }
+    
+    // Reset page to 1 when filters change
+    params.delete('page');
+
+    router.push(`/products?${params.toString()}`);
+  };
+
+  if (loading) {
+    return (
+      <Card className="p-4 mb-6">
+        <h3 className="text-base font-bold text-gray-800 mb-4 uppercase tracking-wide">{t('products.filters.size.title')}</h3>
+        <div className="text-sm text-gray-500">{t('products.filters.size.loading')}</div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="p-4 mb-6">
+      <h3 className="text-base font-bold text-gray-800 mb-4 uppercase tracking-wide">{t('products.filters.size.title')}</h3>
+      {sizes.length === 0 ? (
+        <div className="text-sm text-gray-500 py-4 text-center">
+          {t('products.filters.size.noSizes')}
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {sizes.map((size) => {
+            const isSelected = selected.includes(size.value);
+
+            return (
+              <button
+                key={size.value}
+                onClick={() => handleSizeToggle(size.value)}
+                className={`w-full flex items-center justify-between py-2 px-1 rounded transition-colors group ${
+                  isSelected
+                    ? 'bg-blue-50 hover:bg-blue-100 border border-blue-200'
+                    : 'hover:bg-gray-50'
+                }`}
+              >
+                <span
+                  className={`text-sm group-hover:text-gray-700 ${
+                    isSelected ? 'text-blue-900 font-medium' : 'text-gray-900'
+                  }`}
+                >
+                  {size.value}
+                </span>
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full ${
+                    isSelected
+                      ? 'text-blue-700 bg-blue-100'
+                      : 'text-gray-500 bg-gray-100'
+                  }`}
+                >
+                  {size.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </Card>
+  );
+}
+

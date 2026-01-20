@@ -1,0 +1,64 @@
+{
+  "filters": {
+    "price": {
+      "title": "Фильтр по цене",
+      "priceLabel": "Цена:"
+    },
+    "color": {
+      "title": "Фильтр по цвету",
+      "noColors": "Цвета недоступны",
+      "loading": "Загрузка..."
+    },
+    "size": {
+      "title": "Фильтр по размеру",
+      "noSizes": "Размеры недоступны",
+      "loading": "Загрузка..."
+    },
+    "brand": {
+      "title": "Фильтр по бренду",
+      "searchPlaceholder": "Найти бренд",
+      "noBrands": "Бренды не найдены",
+      "loading": "Загрузка..."
+    }
+  },
+  "header": {
+    "allProducts": "Все товары ({total})",
+    "clearFilters": "Очистить фильтры",
+    "show": "Показать",
+    "all": "Все",
+    "sort": {
+      "default": "Сортировка по умолчанию",
+      "priceAsc": "Цена: от низкой к высокой",
+      "priceDesc": "Цена: от высокой к низкой",
+      "nameAsc": "Название: А-Я",
+      "nameDesc": "Название: Я-А"
+    },
+    "viewModes": {
+      "list": "Вид списка",
+      "grid2": "Вид сетки 2x2",
+      "grid3": "Вид сетки 3x3"
+    },
+    "filters": "Фильтры",
+    "sortProducts": "Сортировать товары"
+  },
+  "grid": {
+    "noProducts": "Товары не найдены."
+  },
+  "mobileFilters": {
+    "title": "Фильтры",
+    "close": "Закрыть фильтры"
+  },
+  "categoryNavigation": {
+    "all": "Все",
+    "shopAll": "Все товары",
+    "newArrivals": "Новинки",
+    "sale": "Распродажа",
+    "labels": {
+      "all": "ВСЕ",
+      "new": "НОВОЕ",
+      "sale": "РАСПРОДАЖА"
+    },
+    "scrollLeft": "Прокрутить категории влево",
+    "scrollRight": "Прокрутить категории вправо"
+  }
+}

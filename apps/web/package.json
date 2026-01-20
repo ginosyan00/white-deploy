@@ -1,0 +1,47 @@
+{
+  "name": "@shop/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:webpack": "next dev --no-turbo",
+    "dev:clean": "node -e \"require('fs').rmSync('.next', {recursive: true, force: true})\" && next dev",
+    "prebuild": "cd ../../packages/db && npm run db:generate",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clean": "node -e \"require('fs').rmSync('.next', {recursive: true, force: true})\"",
+    "prisma:generate": "cd ../../packages/db && npm run db:generate",
+    "reset": "node -e \"require('fs').rmSync('.next', {recursive: true, force: true})\" && cd ../../packages/db && npm run db:generate"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@prisma/client": "^5.9.0",
+    "@shop/design-tokens": "*",
+    "@shop/ui": "*",
+    "@white-shop/db": "*",
+    "bcryptjs": "^2.4.3",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.555.0",
+    "meilisearch": "^0.38.0",
+    "next": "^16.0.7",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-hook-form": "^7.66.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.0.7",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.0"
+  }
+}

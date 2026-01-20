@@ -1,0 +1,51 @@
+{
+  "title": "Returns & Refunds",
+  "returnPolicy": {
+    "title": "30-Day Return Policy",
+    "description": "You have 30 days from the date of purchase to return items in their original condition with tags attached."
+  },
+  "returnConditions": {
+    "title": "Return Conditions",
+    "items": {
+      "unworn": "Items must be unworn, unwashed, and in original packaging",
+      "tags": "All tags and labels must be attached",
+      "saleable": "Items must be in saleable condition",
+      "proof": "Proof of purchase is required"
+    }
+  },
+  "howToReturn": {
+    "title": "How to Return",
+    "steps": {
+      "contact": "Contact our customer service team to initiate a return",
+      "authorization": "Receive a return authorization number",
+      "package": "Package the items securely with the return form",
+      "ship": "Ship the package to our return address",
+      "process": "Once received, we'll process your refund within 5-7 business days"
+    }
+  },
+  "refundProcess": {
+    "title": "Refund Process",
+    "description": "Refunds will be processed to the original payment method. Please allow 5-7 business days for the refund to appear in your account."
+  },
+  "nonReturnable": {
+    "title": "Non-Returnable Items",
+    "items": {
+      "personalized": "Personalized or customized items",
+      "packaging": "Items without original packaging",
+      "damaged": "Items damaged by misuse",
+      "sale": "Sale items (unless defective)"
+    }
+  },
+  "needMoreInfo": {
+    "title": "Need More Information?",
+    "description1": "For detailed delivery and return information, visit our",
+    "deliveryLink": "Delivery & Return page",
+    "description2": "If you have questions, please",
+    "contactLink": "contact our support team"
+  }
+}
+
+
+
+
+

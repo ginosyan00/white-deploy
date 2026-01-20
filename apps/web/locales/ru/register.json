@@ -1,0 +1,43 @@
+{
+  "title": "Создать аккаунт",
+  "subtitle": "Зарегистрируйтесь, чтобы начать свои покупки",
+  "form": {
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Электронная почта",
+    "phone": "Телефон (необязательно, если указан email)",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "acceptTerms": "Я согласен с",
+    "termsOfService": "Условиями использования",
+    "and": "и",
+    "privacyPolicy": "Политикой конфиденциальности",
+    "createAccount": "Создать аккаунт",
+    "creatingAccount": "Создание аккаунта...",
+    "alreadyHaveAccount": "Уже есть аккаунт?",
+    "signIn": "Войти"
+  },
+  "placeholders": {
+    "firstName": "Иван",
+    "lastName": "Иванов",
+    "email": "your@email.com",
+    "phone": "+374 XX XXX XXX",
+    "password": "••••••••",
+    "confirmPassword": "••••••••"
+  },
+  "errors": {
+    "acceptTerms": "Пожалуйста, примите Условия использования и Политику конфиденциальности",
+    "mustAcceptTerms": "Вы должны принять условия, чтобы продолжить",
+    "emailOrPhoneRequired": "Пожалуйста, укажите email или номер телефона",
+    "passwordRequired": "Пожалуйста, введите пароль",
+    "passwordMinLength": "Пароль должен содержать не менее 6 символов",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "registrationFailed": "Регистрация не удалась. Пожалуйста, попробуйте снова."
+  },
+  "passwordHint": "Должно быть не менее 6 символов"
+}
+
+
+
+
+

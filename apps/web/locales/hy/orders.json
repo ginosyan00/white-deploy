@@ -1,0 +1,42 @@
+{
+  "notFound": {
+    "title": "Պատվերը չի գտնվել",
+    "description": "Ձեր փնտրած պատվերը գոյություն չունի:"
+  },
+  "title": "Պատվեր #{number}",
+  "placedOn": "Տեղադրված է {date}",
+  "orderStatus": {
+    "title": "Պատվերի կարգավիճակ",
+    "payment": "Վճարում: {status}",
+    "fulfillment": "Կատարում: {status}"
+  },
+  "orderItems": {
+    "title": "Պատվերի ապրանքներ"
+  },
+  "shippingAddress": {
+    "title": "Առաքման հասցե",
+    "phone": "Հեռախոս: {phone}"
+  },
+  "orderSummary": {
+    "title": "Պատվերի ամփոփում",
+    "subtotal": "Ենթագումար",
+    "discount": "Զեղչ",
+    "shipping": "Առաքում",
+    "tax": "Հարկ",
+    "total": "Ընդամենը",
+    "loadingTotals": "Բեռնվում են գումարները..."
+  },
+  "buttons": {
+    "continueShopping": "Շարունակել գնումները",
+    "viewCart": "Դիտել զամբյուղ"
+  },
+  "itemDetails": {
+    "color": "Գույն:",
+    "size": "Չափ:",
+    "sku": "SKU: {sku}",
+    "quantity": "Քանակ: {qty} × {price} = {total}"
+  }
+}
+
+
+
