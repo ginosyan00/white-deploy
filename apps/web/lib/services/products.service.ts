@@ -72,11 +72,41 @@ const getOutOfStockLabel = (lang: string = "en"): string => {
   return translation.stock.outOfStock;
 };
 
+// Check if we're in build time
+// Detects Next.js build process to prevent database connections during build
+function isBuildTime(): boolean {
+  // Check for Next.js build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return true;
+  }
+  
+  // Check if we're running build command
+  if (process.argv.includes('build') || process.argv.includes('next/build')) {
+    return true;
+  }
+  
+  return false;
+}
+
 class ProductsService {
   /**
    * Get all products with filters
    */
   async findAll(filters: ProductFilters) {
+    // During build time, return empty data to prevent hangs
+    if (isBuildTime()) {
+      console.log("🔧 [PRODUCTS SERVICE] Build time detected, returning empty data");
+      return {
+        data: [],
+        meta: {
+          total: 0,
+          page: filters.page || 1,
+          limit: filters.limit || 24,
+          totalPages: 0,
+        },
+      };
+    }
+
     const {
       category,
       search,

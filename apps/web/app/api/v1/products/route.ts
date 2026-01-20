@@ -1,7 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productsService } from "@/lib/services/products.service";
 
+// Check if we're in build time
+// Detects Next.js build process to prevent database connections during build
+function isBuildTime(): boolean {
+  // Check for Next.js build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return true;
+  }
+  
+  // Check if we're running build command
+  if (process.argv.includes('build') || process.argv.includes('next/build')) {
+    return true;
+  }
+  
+  return false;
+}
+
 export async function GET(req: NextRequest) {
+  // During build time, return empty data to prevent hangs
+  if (isBuildTime()) {
+    console.log("🔧 [PRODUCTS API] Build time detected, returning empty data");
+    return NextResponse.json({
+      data: [],
+      meta: { total: 0, page: 1, limit: 24, totalPages: 0 }
+    });
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const filters = {

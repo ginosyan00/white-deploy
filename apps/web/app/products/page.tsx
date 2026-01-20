@@ -54,7 +54,33 @@ interface ProductsResponse {
 }
 
 /**
+ * Check if we're in build time
+ * Detects Next.js build process to prevent database connections during build
+ */
+function isBuildTime(): boolean {
+  // Check for Next.js build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return true;
+  }
+  
+  // Check if we're running build command
+  if (process.argv.includes('build') || process.argv.includes('next/build')) {
+    return true;
+  }
+  
+  // Check for Vercel build environment
+  if (process.env.VERCEL === '1' && process.env.CI === '1') {
+    // During Vercel build, we might not have database access
+    // Return false here to allow runtime checks, but API routes will handle it
+    return false;
+  }
+  
+  return false;
+}
+
+/**
  * Fetch products (PRODUCTION SAFE)
+ * Returns empty data during build time to prevent hangs
  */
 async function getProducts(
   page: number = 1,
@@ -67,6 +93,15 @@ async function getProducts(
   brand?: string,
   limit: number = 24
 ): Promise<ProductsResponse> {
+  // During build time, return empty data to prevent hangs
+  if (isBuildTime()) {
+    console.log("🔧 [PRODUCTS] Build time detected, returning empty data");
+    return {
+      data: [],
+      meta: { total: 0, page: 1, limit: 24, totalPages: 0 }
+    };
+  }
+
   try {
     const language = getStoredLanguage();
     const params: Record<string, string> = {
@@ -93,21 +128,36 @@ async function getProducts(
     const targetUrl = `${baseUrl}/api/v1/products?${queryString}`;
     console.log("🌐 [PRODUCTS] Fetch products", { targetUrl, baseUrl });
 
-    const res = await fetch(targetUrl, {
-      cache: "no-store"
-    });
+    // Add timeout to prevent hangs (10 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-    if (!res.ok) throw new Error(`API failed: ${res.status}`);
+    try {
+      const res = await fetch(targetUrl, {
+        cache: "no-store",
+        signal: controller.signal
+      });
 
-    const response = await res.json();
-    if (!response.data || !Array.isArray(response.data)) {
-      return {
-        data: [],
-        meta: { total: 0, page: 1, limit: 24, totalPages: 0 }
-      };
+      clearTimeout(timeoutId);
+
+      if (!res.ok) throw new Error(`API failed: ${res.status}`);
+
+      const response = await res.json();
+      if (!response.data || !Array.isArray(response.data)) {
+        return {
+          data: [],
+          meta: { total: 0, page: 1, limit: 24, totalPages: 0 }
+        };
+      }
+
+      return response;
+    } catch (fetchError: any) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        console.error("❌ [PRODUCTS] Fetch timeout after 10 seconds");
+      }
+      throw fetchError;
     }
-
-    return response;
 
   } catch (e) {
     console.error("❌ PRODUCT ERROR", e);
