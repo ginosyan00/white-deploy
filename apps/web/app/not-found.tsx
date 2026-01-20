@@ -7,11 +7,8 @@ import { useTranslation } from '../lib/i18n-client';
  * Custom 404 Not Found Page
  * 
  * This page is displayed when a route is not found.
- * Using route segment config to prevent prerendering.
+ * Client component - Next.js will not prerender this page automatically.
  */
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
-export const revalidate = 0;
 
 export default function NotFound() {
   const { t } = useTranslation();
