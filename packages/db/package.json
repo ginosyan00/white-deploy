@@ -17,10 +17,10 @@
     "seed": "node prisma/seed.cjs"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.0"
+    "@prisma/client": "latest"
   },
   "devDependencies": {
-    "prisma": "^5.9.0"
+    "prisma": "latest"
   }
 }
 
