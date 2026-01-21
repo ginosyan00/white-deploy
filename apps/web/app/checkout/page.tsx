@@ -88,12 +88,36 @@ export default function CheckoutPage() {
     },
   ];
 
+  // Phone number normalization function
+  // Removes spaces, dashes, parentheses, and other formatting characters
+  const normalizePhoneNumber = (phone: string): string => {
+    if (!phone) return '';
+    // Remove all non-digit characters except +
+    return phone.replace(/[^\d+]/g, '');
+  };
+
+  // Phone validation function - accepts various formats
+  const validatePhoneNumber = (phone: string): boolean => {
+    if (!phone || phone.trim().length === 0) return false;
+    
+    // Normalize phone number
+    const normalized = normalizePhoneNumber(phone);
+    
+    // Check if normalized phone has valid length (8-15 digits, optional + prefix)
+    // Armenian phone numbers: +374XXXXXXXX, 0XXXXXXXX, or just digits
+    return /^\+?[0-9]{8,15}$/.test(normalized);
+  };
+
   // Create validation schema with translations
   const checkoutSchema = useMemo(() => z.object({
     firstName: z.string().min(1, t('checkout.errors.firstNameRequired')),
     lastName: z.string().min(1, t('checkout.errors.lastNameRequired')),
     email: z.string().email(t('checkout.errors.invalidEmail')).min(1, t('checkout.errors.emailRequired')),
-    phone: z.string().min(1, t('checkout.errors.phoneRequired')).regex(/^\+?[0-9]{8,15}$/, t('checkout.errors.invalidPhone')),
+    phone: z.string()
+      .min(1, t('checkout.errors.phoneRequired'))
+      .refine((val) => validatePhoneNumber(val), {
+        message: t('checkout.errors.invalidPhone'),
+      }),
     shippingMethod: z.enum(['pickup', 'delivery'], {
       message: t('checkout.errors.selectShippingMethod'),
     }),
@@ -139,7 +163,7 @@ export default function CheckoutPage() {
     path: ['shippingPhone'],
   }).refine((data) => {
     if (data.shippingPhone && data.shippingPhone.trim().length > 0) {
-      return /^\+?[0-9]{8,15}$/.test(data.shippingPhone);
+      return validatePhoneNumber(data.shippingPhone);
     }
     return true;
   }, {
@@ -613,17 +637,21 @@ export default function CheckoutPage() {
         cartId = 'guest-cart'; // Keep as guest-cart for API to recognize
       }
 
+      // Normalize phone numbers before processing
+      const normalizedPhone = normalizePhoneNumber(data.phone);
+      const normalizedShippingPhone = data.shippingPhone ? normalizePhoneNumber(data.shippingPhone) : undefined;
+
       // Prepare shipping address only for delivery
       const shippingAddress = data.shippingMethod === 'delivery' && 
         data.shippingAddress && 
         data.shippingCity && 
         data.shippingPostalCode &&
-        data.shippingPhone
+        normalizedShippingPhone
         ? {
             address: data.shippingAddress,
             city: data.shippingCity,
             postalCode: data.shippingPostalCode,
-            phone: data.shippingPhone,
+            phone: normalizedShippingPhone,
           }
         : undefined;
 
@@ -660,7 +688,7 @@ export default function CheckoutPage() {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        phone: data.phone,
+        phone: normalizedPhone,
         shippingMethod: data.shippingMethod,
         ...(shippingAddress ? { shippingAddress } : {}),
         paymentMethod: data.paymentMethod,
@@ -773,11 +801,14 @@ export default function CheckoutPage() {
                   <Input
                     label={t('checkout.form.phone')}
                     type="tel"
-                    placeholder={t('checkout.placeholders.phone')}
+                    placeholder="+374 XX XXX XXX կամ 0XX XXX XXX"
                     {...register('phone')}
                     error={errors.phone?.message}
                     disabled={isSubmitting}
                   />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Կարող եք գրել ցանկացած ձևով (spaces, dashes, parentheses)
+                  </p>
                 </div>
               </div>
             </Card>
@@ -907,7 +938,7 @@ export default function CheckoutPage() {
                     <Input
                       label={t('checkout.form.phoneNumber')}
                       type="tel"
-                      placeholder={t('checkout.placeholders.phone')}
+                      placeholder="+374 XX XXX XXX կամ 0XX XXX XXX"
                       {...register('shippingPhone', {
                         onChange: () => {
                           if (error && error.includes('shipping address')) {
@@ -918,6 +949,9 @@ export default function CheckoutPage() {
                       error={errors.shippingPhone?.message}
                       disabled={isSubmitting}
                     />
+                    <p className="mt-1 text-xs text-gray-500">
+                      Կարող եք գրել ցանկացած ձևով (spaces, dashes, parentheses)
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -1144,11 +1178,14 @@ export default function CheckoutPage() {
                     <Input
                       label={t('checkout.form.phoneNumber')}
                       type="tel"
-                      placeholder={t('checkout.placeholders.phone')}
+                      placeholder="+374 XX XXX XXX կամ 0XX XXX XXX"
                       {...register('shippingPhone')}
                       error={errors.shippingPhone?.message}
                       disabled={isSubmitting}
                     />
+                    <p className="mt-1 text-xs text-gray-500">
+                      Կարող եք գրել ցանկացած ձևով (spaces, dashes, parentheses)
+                    </p>
                   </div>
                 </div>
 
