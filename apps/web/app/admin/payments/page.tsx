@@ -23,6 +23,8 @@ interface AmeriaConfig {
   lastValidatedAt?: string;
   orderIdMin?: number;
   orderIdMax?: number;
+  allowedTestCards?: string[]; // Last 4 digits of allowed test cards
+  testCardStrictMode?: boolean; // If true, only allowed test cards are accepted
 }
 
 export default function PaymentsPage() {
@@ -40,7 +42,10 @@ export default function PaymentsPage() {
     isActive: false,
     orderIdMin: undefined,
     orderIdMax: undefined,
+    allowedTestCards: [],
+    testCardStrictMode: true,
   });
+  const [testCardInput, setTestCardInput] = useState(''); // For adding new test cards
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [validating, setValidating] = useState(false);
@@ -117,6 +122,8 @@ export default function PaymentsPage() {
         isActive: false, // Don't auto-activate, require validation first
         orderIdMin: config.orderIdMin ? Number(config.orderIdMin) : undefined,
         orderIdMax: config.orderIdMax ? Number(config.orderIdMax) : undefined,
+        allowedTestCards: config.allowedTestCards || [],
+        testCardStrictMode: config.testCardStrictMode ?? true,
       });
 
       setConfig(response.config);
@@ -447,6 +454,119 @@ export default function PaymentsPage() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Test Card Validation Section */}
+                  {config.testMode && (
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          🔒 Test Card Validation
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          In test mode, only bank-provided test cards are accepted. Configure the list of allowed test card last 4 digits below.
+                        </p>
+                      </div>
+
+                      <div className="space-y-4">
+                        {/* Strict Mode Toggle */}
+                        <div>
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={config.testCardStrictMode ?? true}
+                              onChange={(e) => setConfig({ ...config, testCardStrictMode: e.target.checked })}
+                              className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                              disabled={saving || validating}
+                            />
+                            <span className="text-sm font-medium text-gray-700">
+                              Strict Mode (Only allow configured test cards)
+                            </span>
+                          </label>
+                          <p className="mt-1 text-xs text-gray-500 ml-8">
+                            When enabled, payments with cards not in the allowed list will be rejected in test mode.
+                          </p>
+                        </div>
+
+                        {/* Test Cards List */}
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Allowed Test Cards (Last 4 Digits)
+                          </label>
+                          <div className="flex gap-2 mb-2">
+                            <Input
+                              type="text"
+                              value={testCardInput}
+                              onChange={(e) => {
+                                // Only allow 4 digits
+                                const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                setTestCardInput(value);
+                              }}
+                              placeholder="1234"
+                              maxLength={4}
+                              disabled={saving || validating}
+                              className="flex-1"
+                            />
+                            <Button
+                              variant="outline"
+                              onClick={() => {
+                                if (testCardInput.length === 4) {
+                                  const currentCards = config.allowedTestCards || [];
+                                  if (!currentCards.includes(testCardInput)) {
+                                    setConfig({
+                                      ...config,
+                                      allowedTestCards: [...currentCards, testCardInput],
+                                    });
+                                    setTestCardInput('');
+                                  }
+                                }
+                              }}
+                              disabled={saving || validating || testCardInput.length !== 4}
+                            >
+                              Add
+                            </Button>
+                          </div>
+
+                          {/* Cards List */}
+                          {config.allowedTestCards && config.allowedTestCards.length > 0 ? (
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {config.allowedTestCards.map((card, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-md"
+                                >
+                                  <span className="text-sm font-mono text-blue-900">****{card}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newCards = config.allowedTestCards?.filter((_, i) => i !== index) || [];
+                                      setConfig({ ...config, allowedTestCards: newCards });
+                                    }}
+                                    className="text-blue-600 hover:text-blue-800"
+                                    disabled={saving || validating}
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500 mt-2">
+                              No test cards configured. Add test card last 4 digits provided by the bank.
+                            </p>
+                          )}
+
+                          <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <p className="text-xs text-yellow-800">
+                              <strong>⚠️ Important:</strong> Only add test card last 4 digits provided by Ameria Bank. 
+                              Payments with cards not in this list will be rejected in test mode when Strict Mode is enabled.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Action Buttons */}
                   <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200">

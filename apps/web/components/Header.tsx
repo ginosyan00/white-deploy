@@ -177,6 +177,7 @@ export function Header() {
   const [wishlistCount, setWishlistCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCurrency, setShowCurrency] = useState(false);
   const [showMobileCurrency, setShowMobileCurrency] = useState(false);
@@ -332,6 +333,11 @@ export function Header() {
       setCartTotal(0);
     }
   };
+
+  // Set mounted flag to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Load wishlist and compare counts from localStorage
   useEffect(() => {
@@ -854,8 +860,11 @@ export function Header() {
                 <div className="w-11 h-11 flex items-center justify-center text-gray-700 hover:text-gray-900 transition-colors duration-150 relative">
                   <BadgeIcon icon={<CartIcon size={19} />} badge={cartCount} />
                 </div>
-                <span className="text-gray-800 font-bold text-sm hidden sm:block min-w-[3.25rem] group-hover:text-gray-900 transition-colors">
-                  {formatPrice(cartTotal, selectedCurrency)}
+                <span 
+                  className="text-gray-800 font-bold text-sm hidden sm:block min-w-[3.25rem] group-hover:text-gray-900 transition-colors"
+                  suppressHydrationWarning
+                >
+                  {isMounted ? formatPrice(cartTotal, selectedCurrency) : formatPrice(0, selectedCurrency)}
                 </span>
               </Link>
             </div>

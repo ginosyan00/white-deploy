@@ -7,6 +7,7 @@
 
 import { db } from "@white-shop/db";
 import crypto from "crypto";
+import { normalizeTestCardList } from "./test-card-validator";
 
 const CONFIG_KEY = "payment.ameria.config";
 const ENCRYPTION_ALGORITHM = "aes-256-cbc";
@@ -25,6 +26,12 @@ export interface AmeriaPaymentConfig {
   lastValidatedAt?: Date;
   orderIdMin?: number; // Minimum order ID for Ameria Bank
   orderIdMax?: number; // Maximum order ID for Ameria Bank
+  /**
+   * Test card validation configuration
+   * Only used in test mode to restrict which test cards are accepted
+   */
+  allowedTestCards?: string[]; // Last 4 digits of allowed test cards (e.g., ["1234", "5678"])
+  testCardStrictMode?: boolean; // If true, only allowed test cards are accepted
 }
 
 /**
@@ -109,6 +116,8 @@ class PaymentConfigService {
         lastValidatedAt: config.lastValidatedAt ? new Date(config.lastValidatedAt) : undefined,
         orderIdMin: config.orderIdMin ? Number(config.orderIdMin) : undefined,
         orderIdMax: config.orderIdMax ? Number(config.orderIdMax) : undefined,
+        allowedTestCards: config.allowedTestCards || [],
+        testCardStrictMode: config.testCardStrictMode ?? true, // Default to strict mode
       };
     } catch (error: any) {
       console.error("❌ [PAYMENT CONFIG] Error getting config:", error);
@@ -131,9 +140,19 @@ class PaymentConfigService {
       // Get existing config to preserve fields not being updated
       const existing = await this.getConfig();
       
+      // Normalize test cards list if provided
+      let normalizedTestCards: string[] = [];
+      if (config.allowedTestCards && Array.isArray(config.allowedTestCards)) {
+        normalizedTestCards = normalizeTestCardList(config.allowedTestCards);
+      } else if (existing?.allowedTestCards) {
+        normalizedTestCards = existing.allowedTestCards;
+      }
+      
       const updatedConfig: any = {
         ...existing,
         ...config,
+        allowedTestCards: normalizedTestCards,
+        testCardStrictMode: config.testCardStrictMode ?? existing?.testCardStrictMode ?? true,
       };
 
       // Encrypt password if provided

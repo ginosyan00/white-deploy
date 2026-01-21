@@ -28,6 +28,7 @@ import { db } from "@white-shop/db";
 import { AmeriaClient } from "./ameria-client";
 import { paymentConfigService, AmeriaPaymentConfig } from "./payment-config.service";
 import { getStoredLanguage } from "../../language";
+import { validateTestCard, normalizeTestCardList } from "./test-card-validator";
 
 export interface PaymentInitResult {
   paymentId: string;
@@ -352,9 +353,9 @@ class AmeriaPaymentService {
         };
       }
 
-      // Get client and verify payment
+      // Get client and config for verification
       // CRITICAL: Always verify via GetPaymentDetails API - never trust URL parameters alone
-      const { client } = await this.getClient();
+      const { client, config } = await this.getClient();
 
       // Get payment details from Ameria to verify status
       const paymentDetails = await client.getPaymentDetails(paymentId);
@@ -412,15 +413,83 @@ class AmeriaPaymentService {
       const order = payment.order;
 
       // Determine payment status based on response code
-      // Success criteria according to specification:
-      // - ResponseCode === "00"
-      // - PaymentState === "Successful"
+      // Success criteria according to specification (matching PHP implementation):
+      // - ResponseCode === "00" (primary check, as in PHP: $body->ResponseCode == '00')
+      // - PaymentState === "Successful" (additional verification)
       // - OrderStatus === 2 (payment_deposited)
-      const isSuccess = paymentDetails.ResponseCode === "00" && 
-                       paymentDetails.PaymentState === "Successful" &&
-                       paymentDetails.OrderStatus === 2;
+      let isSuccess = paymentDetails.ResponseCode === "00" && 
+                     paymentDetails.PaymentState === "Successful" &&
+                     paymentDetails.OrderStatus === 2;
+
+      // CRITICAL: In test mode, validate test card number BEFORE accepting payment
+      // This matches the PHP pattern where validation happens after ResponseCode check
+      // Only bank-provided test cards should be accepted
+      if (isSuccess && config.testMode) {
+        const cardValidation = validateTestCard(
+          paymentDetails.CardNumber,
+          {
+            allowedLast4Digits: config.allowedTestCards || [],
+            strictMode: config.testCardStrictMode ?? true,
+          },
+          config.testMode
+        );
+
+        if (!cardValidation.valid) {
+          console.error("🚫 [AMERIA PAYMENT] Test card validation failed - rejecting payment:", {
+            paymentId,
+            orderId: order.number,
+            orderIdInternal: order.id,
+            cardNumber: paymentDetails.CardNumber,
+            cardLast4: cardValidation.cardLast4,
+            validationMessage: cardValidation.message,
+            allowedCards: config.allowedTestCards || [],
+            responseCode: paymentDetails.ResponseCode,
+            paymentState: paymentDetails.PaymentState,
+            orderStatus: paymentDetails.OrderStatus,
+          });
+
+          // Reject payment - mark as failed
+          // This prevents accepting payments with unauthorized test cards
+          isSuccess = false;
+          
+          // Update error message with card validation failure
+          // Store detailed error message for order notes (similar to PHP: FailedMessageAmeria)
+          paymentDetails.RespMessage = cardValidation.message;
+          paymentDetails.ResponseMessage = cardValidation.message;
+          
+          // Log as security event
+          console.warn("🔒 [AMERIA PAYMENT] SECURITY: Payment rejected due to unauthorized test card", {
+            paymentId,
+            orderId: order.number,
+            cardLast4: cardValidation.cardLast4,
+            timestamp: new Date().toISOString(),
+          });
+        } else {
+          console.log("✅ [AMERIA PAYMENT] Test card validated successfully:", {
+            paymentId,
+            orderId: order.number,
+            cardLast4: cardValidation.cardLast4,
+            allowedCards: config.allowedTestCards || [],
+          });
+        }
+      } else if (isSuccess && config.testMode && (!config.allowedTestCards || config.allowedTestCards.length === 0)) {
+        // Warning: Test mode enabled but no test cards configured
+        console.warn("⚠️ [AMERIA PAYMENT] Test mode enabled but no allowed test cards configured", {
+          paymentId,
+          orderId: order.number,
+          testCardStrictMode: config.testCardStrictMode,
+        });
+      }
 
       // Update payment record
+      // Store detailed error information (similar to PHP: FailedMessageAmeria meta)
+      const errorMessage = !isSuccess 
+        ? (paymentDetails.RespMessage || paymentDetails.ResponseMessage || 'Payment failed')
+        : null;
+      const errorCode = !isSuccess 
+        ? (paymentDetails.ResponseCode || paymentDetails.RespCode || 'UNKNOWN')
+        : null;
+
       await db.payment.update({
         where: { id: payment.id },
         data: {
@@ -428,8 +497,8 @@ class AmeriaPaymentService {
           providerResponse: paymentDetails as any,
           completedAt: isSuccess ? new Date() : null,
           failedAt: !isSuccess ? new Date() : null,
-          errorCode: !isSuccess ? (paymentDetails.ResponseCode || paymentDetails.RespCode) : null,
-          errorMessage: !isSuccess ? (paymentDetails.RespMessage || 'Payment failed') : null,
+          errorCode: errorCode,
+          errorMessage: errorMessage,
           cardLast4: paymentDetails.CardNumber 
             ? paymentDetails.CardNumber.replace(/\*/g, '').slice(-4) || paymentDetails.CardNumber.slice(-4)
             : null,
@@ -448,7 +517,8 @@ class AmeriaPaymentService {
         },
       });
 
-      // Create order event
+      // Create order event with detailed information
+      // Include test card validation result if applicable
       await db.orderEvent.create({
         data: {
           orderId: order.id,
@@ -462,6 +532,20 @@ class AmeriaPaymentService {
             paymentState: paymentDetails.PaymentState,
             orderStatus: paymentDetails.OrderStatus,
             amount: payment.amount,
+            // Include test mode validation info
+            ...(config.testMode && {
+              testMode: true,
+              cardValidation: paymentDetails.CardNumber ? {
+                cardLast4: paymentDetails.CardNumber.replace(/\*/g, '').slice(-4) || paymentDetails.CardNumber.slice(-4),
+                allowedCards: config.allowedTestCards || [],
+                strictMode: config.testCardStrictMode ?? true,
+              } : null,
+            }),
+            // Include error details for failed payments
+            ...(!isSuccess && {
+              errorCode: errorCode,
+              errorMessage: errorMessage,
+            }),
           },
         },
       });
