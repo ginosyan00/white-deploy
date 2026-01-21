@@ -67,15 +67,20 @@ export default function PaymentsPage() {
       
       const response = await apiClient.get<{ config: AmeriaConfig | null }>('/api/v1/admin/payments/config');
       
+      // Always ensure callback URL is set (auto-detect from current domain)
+      const callbackUrl = getCallbackUrl();
+      
       if (response.config) {
         setConfig({
           ...response.config,
           password: '', // Don't show password, require re-entry
+          // Auto-update callback URLs if they're empty or incorrect
+          returnUrl: response.config.returnUrl || callbackUrl,
+          callbackUrl: response.config.callbackUrl || callbackUrl,
         });
       } else {
         // Set default callback URLs based on current domain
         // This will automatically use the correct URL after deploy
-        const callbackUrl = getCallbackUrl();
         setConfig({
           ...config,
           returnUrl: callbackUrl, // BackURL must point to callback endpoint
@@ -364,10 +369,17 @@ export default function PaymentsPage() {
                         placeholder="https://yoursite.com/api/v1/payments/ameria/callback"
                         disabled={saving || validating}
                       />
-                      <p className="mt-1 text-xs text-gray-500">
-                        BackURL: Where Ameria Bank redirects users after payment (callback URL). 
-                        Must be: /api/v1/payments/ameria/callback
-                      </p>
+                      <div className="mt-1 space-y-1">
+                        <p className="text-xs text-gray-500">
+                          <strong>BackURL:</strong> Where Ameria Bank redirects users after payment (callback URL).
+                        </p>
+                        <p className="text-xs text-blue-600">
+                          ✅ Auto-detected: <code className="bg-blue-50 px-1 rounded">{getCallbackUrl()}</code>
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          This URL is automatically set based on your current domain. No need to change it unless you have a custom domain.
+                        </p>
+                      </div>
                     </div>
 
                     <div>
@@ -379,9 +391,14 @@ export default function PaymentsPage() {
                         placeholder="https://yoursite.com/api/v1/payments/ameria/callback"
                         disabled={saving || validating}
                       />
-                      <p className="mt-1 text-xs text-gray-500">
-                        Callback URL (same as Return URL). Ameria Bank uses redirect callback (GET request), not server-to-server webhook.
-                      </p>
+                      <div className="mt-1 space-y-1">
+                        <p className="text-xs text-gray-500">
+                          <strong>Callback URL:</strong> Same as Return URL. Ameria Bank uses redirect callback (GET request), not server-to-server webhook.
+                        </p>
+                        <p className="text-xs text-blue-600">
+                          ✅ Auto-detected: <code className="bg-blue-50 px-1 rounded">{getCallbackUrl()}</code>
+                        </p>
+                      </div>
                     </div>
 
                     <div>
@@ -428,15 +445,41 @@ export default function PaymentsPage() {
                   </div>
 
                   {/* Info Box */}
-                  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h3 className="text-sm font-semibold text-blue-900 mb-2">Configuration Instructions</h3>
-                    <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                      <li>Contact Ameria Bank to obtain your Client ID, Username, and Password</li>
-                      <li>Use Test Mode during development and testing</li>
-                      <li>Switch to Live Mode only after thorough testing</li>
-                      <li>Ensure Return URL and Callback URL are accessible from the internet</li>
-                      <li>After saving, click "Validate & Activate" to test the connection</li>
-                    </ul>
+                  <div className="mt-6 space-y-4">
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <h3 className="text-sm font-semibold text-blue-900 mb-2">📋 Configuration Instructions</h3>
+                      <ol className="text-sm text-blue-800 space-y-2 list-decimal list-inside">
+                        <li><strong>Fill in credentials:</strong> Enter Client ID, Username, and Password from Ameria Bank</li>
+                        <li><strong>Check URLs:</strong> Return URL and Callback URL are auto-detected (no need to change)</li>
+                        <li><strong>Test Mode:</strong> Keep Test Mode enabled for testing with test credentials</li>
+                        <li><strong>Save:</strong> Click "Save" to store the configuration</li>
+                        <li><strong>Validate:</strong> Click "Validate & Activate" to test connection and activate payment system</li>
+                      </ol>
+                    </div>
+
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <h3 className="text-sm font-semibold text-green-900 mb-2">✅ Quick Start Guide</h3>
+                      <div className="text-sm text-green-800 space-y-2">
+                        <p><strong>Step 1:</strong> Enter your test credentials from Ameria Bank</p>
+                        <p><strong>Step 2:</strong> Verify that Callback URL is correct (auto-detected)</p>
+                        <p><strong>Step 3:</strong> Click "Save" button</p>
+                        <p><strong>Step 4:</strong> Click "Validate & Activate" button</p>
+                        <p><strong>Step 5:</strong> If validation succeeds, payment system will be activated automatically</p>
+                        <p className="mt-3 text-xs text-green-700">
+                          💡 <strong>Tip:</strong> After activation, go to checkout page and test a payment with Ameria Bank option selected.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <h3 className="text-sm font-semibold text-yellow-900 mb-2">⚠️ Important Notes</h3>
+                      <ul className="text-sm text-yellow-800 space-y-1 list-disc list-inside">
+                        <li>Callback URL is automatically detected from your current domain - no manual configuration needed</li>
+                        <li>Test Mode uses test credentials - switch to Live Mode only after thorough testing</li>
+                        <li>Validation creates a test payment (1 AMD) to verify credentials - this is normal</li>
+                        <li>After activation, payment system will be available in checkout page</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               )}
