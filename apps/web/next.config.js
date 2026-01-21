@@ -10,11 +10,7 @@ const nextConfig = {
     ignoreBuildErrors: true, // TypeScript errors won't stop build
   },
   // Prevent static generation during build for dynamic pages
-  // This ensures pages marked with 'force-dynamic' are not pre-rendered
-  experimental: {
-    // Skip static generation for dynamic routes during build
-    isrMemoryCacheSize: 0, // Disable ISR cache during build
-  },     
+  // This ensures pages marked with 'force-dynamic' are not pre-rendered     
   images: {
     remotePatterns: [
       {
