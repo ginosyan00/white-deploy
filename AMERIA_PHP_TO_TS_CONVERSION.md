@@ -499,3 +499,6 @@ async getPaymentDetails(paymentId: string): Promise<PaymentDetailsResponse> {
 **Եզրակացություն:** PHP կոդերը **շատ օգտակար** են և ցույց են տալիս **ճիշտ** implementation-ը:
 
 
+
+
+

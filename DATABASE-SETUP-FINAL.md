@@ -97,3 +97,6 @@ postgresql://neondb_owner:npg_NzMXVrnRY7i0@ep-fancy-fog-ah0pq960-pooler.c-3.us-e
 **Important:** Connection string-ը պարունակում է `client_encoding=UTF8` parameter-ը UTF-8 characters (հայերեն) աջակցության համար։
 
 
+
+
+
