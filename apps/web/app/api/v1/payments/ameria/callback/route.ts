@@ -90,33 +90,32 @@ export async function GET(req: NextRequest) {
 
     // Map callback parameters to service format
     // Note: We pass both formats for compatibility
+    // Convert null to undefined for type compatibility
     const params = {
-      PaymentID: paymentID,
-      paymentID: paymentID,
-      OrderID: orderID,
-      orderID: orderID,
-      Opaque: opaque,
-      opaque: opaque,
-      resposneCode: resposneCode, // Note: typo in API!
-      RespCode: resposneCode, // Also map to RespCode for compatibility
-      currency: currency,
+      PaymentID: paymentID || undefined,
+      paymentID: paymentID || undefined,
+      OrderID: orderID || undefined,
+      orderID: orderID || undefined,
+      Opaque: opaque || undefined,
+      opaque: opaque || undefined,
+      resposneCode: resposneCode || undefined, // Note: typo in API!
+      RespCode: resposneCode || undefined, // Also map to RespCode for compatibility
+      currency: currency || undefined,
     };
 
     // CRITICAL: Always verify payment status via GetPaymentDetails API
     // Never trust URL parameters alone - they can be manipulated
     const result = await ameriaPaymentService.handleCallback(params);
 
-    // Redirect user to order page
-    const redirectUrl = result.success
-      ? `/orders/${result.orderId}?payment=success`
-      : `/orders/${result.orderId}?payment=failed&error=${encodeURIComponent(result.message)}`;
+    // Redirect user to payment result page (simple true/false display)
+    const redirectUrl = `/payment/result?success=${result.success ? 'true' : 'false'}`;
 
     return NextResponse.redirect(new URL(redirectUrl, req.url));
   } catch (error: any) {
     console.error("❌ [AMERIA CALLBACK] Error processing redirect:", error);
     
-    // Redirect to error page
-    const errorUrl = `/checkout?error=${encodeURIComponent(error.detail || error.message || "Payment processing failed")}`;
+    // Redirect to payment result page with false (error = failure)
+    const errorUrl = `/payment/result?success=false`;
     return NextResponse.redirect(new URL(errorUrl, req.url));
   }
 }

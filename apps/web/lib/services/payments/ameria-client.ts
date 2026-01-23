@@ -237,11 +237,17 @@ export class AmeriaClient {
             originalAmount: params.amount,
             currency: params.currency,
             testMode: this.config.testMode,
+            clientId: this.config.clientId,
+            username: this.config.username,
+            // Don't log password for security
           },
         });
         
+        // Check for common error scenarios and provide clearer messages
+        const lowerMessage = errorMessage.toLowerCase();
+        
         // Check if error is about test mode amount
-        if (this.config.testMode && errorMessage.toLowerCase().includes('test mode') && errorMessage.toLowerCase().includes('amount')) {
+        if (this.config.testMode && (lowerMessage.includes('test mode') || lowerMessage.includes('amount'))) {
           throw {
             status: 400,
             type: 'test_mode_amount_error',
@@ -250,6 +256,17 @@ export class AmeriaClient {
           };
         }
         
+        // Check for authentication/credential errors
+        if (lowerMessage.includes('invalid') && (lowerMessage.includes('client') || lowerMessage.includes('username') || lowerMessage.includes('password') || lowerMessage.includes('credential'))) {
+          throw {
+            status: 401,
+            type: 'payment_auth_error',
+            title: 'Payment Authentication Failed',
+            detail: 'Invalid payment credentials. Please check your Client ID, Username, and Password in the payment settings.',
+          };
+        }
+        
+        // Generic payment initialization error
         throw {
           status: 400,
           type: 'payment_init_error',
@@ -269,7 +286,17 @@ export class AmeriaClient {
       console.error('❌ [AMERIA CLIENT] Error initializing payment:', {
         error: error.message,
         stack: error.stack,
+        status: error.status,
+        type: error.type,
+        detail: error.detail,
       });
+      
+      // Re-throw custom errors (already formatted)
+      if (error.status && error.type) {
+        throw error;
+      }
+      
+      // Wrap other errors
       throw {
         status: 500,
         type: 'payment_init_error',
@@ -539,6 +566,18 @@ export class AmeriaClient {
     // Construct URL according to documentation format
     // Parameter name is 'id' (not 'PaymentID') and 'lang' is required
     const paymentUrl = `${paymentBaseUrl}?id=${encodeURIComponent(paymentId)}&lang=${normalizedLang}`;
+    
+    // Validate generated URL - must be from Ameria Bank
+    if (!paymentUrl.includes('ameriabank.am')) {
+      console.error('❌ [AMERIA CLIENT] Generated URL is not from Ameria Bank:', paymentUrl);
+      throw new Error('Invalid payment URL generated. URL must be from Ameria Bank.');
+    }
+    
+    // Ensure URL is not from Arca or other providers
+    if (paymentUrl.includes('arca.am') || paymentUrl.includes('processform.do')) {
+      console.error('❌ [AMERIA CLIENT] Generated URL is from wrong provider:', paymentUrl);
+      throw new Error('Invalid payment URL generated. URL must be from Ameria Bank, not Arca.');
+    }
     
     console.log('🔗 [AMERIA CLIENT] Generated payment URL:', {
       testMode: this.config.testMode,

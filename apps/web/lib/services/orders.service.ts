@@ -1,4 +1,4 @@
-import { db } from "@white-shop/db";
+import { db, executeWithRetry } from "@white-shop/db";
 
 function generateOrderNumber(): string {
   const now = new Date();
@@ -48,30 +48,32 @@ class OrdersService {
       }> = [];
 
       if (userId && cartId && cartId !== 'guest-cart') {
-        // Get items from user's cart
-        const cart = await db.cart.findFirst({
-          where: { id: cartId, userId },
-          include: {
-            items: {
-              include: {
-                variant: {
-                  include: {
-                    product: {
-                      include: {
-                        translations: true,
+        // Get items from user's cart with retry on connection errors
+        const cart = await executeWithRetry(async (client) => {
+          return await client.cart.findFirst({
+            where: { id: cartId, userId },
+            include: {
+              items: {
+                include: {
+                  variant: {
+                    include: {
+                      product: {
+                        include: {
+                          translations: true,
+                        },
                       },
+                      options: true,
                     },
-                    options: true,
                   },
-                },
-                product: {
-                  include: {
-                    translations: true,
+                  product: {
+                    include: {
+                      translations: true,
+                    },
                   },
                 },
               },
             },
-          },
+          });
         });
 
         if (!cart || cart.items.length === 0) {
@@ -152,17 +154,19 @@ class OrdersService {
               };
             }
 
-            // Get product and variant details
-            const variant = await db.productVariant.findUnique({
-              where: { id: variantId },
-              include: {
-                product: {
-                  include: {
-                    translations: true,
+            // Get product and variant details with retry on connection errors
+            const variant = await executeWithRetry(async (client) => {
+              return await client.productVariant.findUnique({
+                where: { id: variantId },
+                include: {
+                  product: {
+                    include: {
+                      translations: true,
+                    },
                   },
+                  options: true,
                 },
-                options: true,
-              },
+              });
             });
 
             if (!variant || variant.productId !== productId) {
@@ -242,8 +246,9 @@ class OrdersService {
       // Generate order number
       const orderNumber = generateOrderNumber();
 
-      // Create order with items in a transaction
-      const order = await db.$transaction(async (tx: any) => {
+      // Create order with items in a transaction with retry on connection errors
+      const order = await executeWithRetry(async (client) => {
+        return await client.$transaction(async (tx: any) => {
         // Create order
         const newOrder = await tx.order.create({
           data: {
@@ -324,6 +329,7 @@ class OrdersService {
         }
 
         return { order: newOrder, payment };
+        });
       });
 
       // Initialize payment with Ameria Bank if payment method is 'ameria'
@@ -352,7 +358,20 @@ class OrdersService {
             status: error.status,
             type: error.type,
             title: error.title,
+            stack: error.stack,
           });
+          
+          // CRITICAL: Re-throw custom errors as-is to preserve status codes and error details
+          // This ensures that errors from the bank (wrong credentials, etc.) are properly propagated
+          if (error.status && error.type && error.detail) {
+            console.error('❌ [ORDERS SERVICE] Re-throwing payment error with original status:', {
+              status: error.status,
+              type: error.type,
+              title: error.title,
+              detail: error.detail,
+            });
+            throw error;
+          }
           
           // If payment system is inactive or configuration is missing, throw error
           // This prevents creating orders that cannot be paid
@@ -365,12 +384,13 @@ class OrdersService {
             };
           }
           
-          // For other errors, still throw to prevent order creation without payment
+          // For other errors (including 400 from wrong credentials), throw with preserved status
+          // This ensures wrong credentials return 400, not 500
           throw {
-            status: error.status || 500,
+            status: error.status || 400,
             type: error.type || "payment_init_error",
             title: error.title || "Payment Initialization Failed",
-            detail: error.detail || error.message || "Failed to initialize payment with Ameria Bank. Please try again or choose another payment method.",
+            detail: error.detail || error.message || "Failed to initialize payment with Ameria Bank. Please check your credentials or try again.",
           };
         }
       }
@@ -437,13 +457,15 @@ class OrdersService {
    * Get user orders list
    */
   async list(userId: string) {
-    const orders = await db.order.findMany({
-      where: { userId },
-      include: {
-        items: true,
-        payments: true,
-      },
-      orderBy: { createdAt: "desc" },
+    const orders = await executeWithRetry(async (client) => {
+      return await client.order.findMany({
+        where: { userId },
+        include: {
+          items: true,
+          payments: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
     });
 
     return {
@@ -475,21 +497,23 @@ class OrdersService {
    * Get order by number
    */
   async findByNumber(orderNumber: string, userId: string) {
-    const order = await db.order.findFirst({
-      where: {
-        number: orderNumber,
-        userId,
-      },
-      include: {
-        items: {
-          include: {
-            variant: {
-              include: {
-                options: {
-                  include: {
-                    attributeValue: {
-                      include: {
-                        attribute: true,
+    const order = await executeWithRetry(async (client) => {
+      return await client.order.findFirst({
+        where: {
+          number: orderNumber,
+          userId,
+        },
+        include: {
+          items: {
+            include: {
+              variant: {
+                include: {
+                  options: {
+                    include: {
+                      attributeValue: {
+                        include: {
+                          attribute: true,
+                        },
                       },
                     },
                   },
@@ -500,7 +524,7 @@ class OrdersService {
         },
         payments: true,
         events: true,
-      },
+      });
     });
 
     if (!order) {

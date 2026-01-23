@@ -289,13 +289,29 @@ class AmeriaPaymentService {
         orderId: order.number,
       };
     } catch (error: any) {
-      console.error("❌ [AMERIA PAYMENT] Error initializing payment:", error);
+      console.error("❌ [AMERIA PAYMENT] Error initializing payment:", {
+        error: error,
+        message: error.message,
+        detail: error.detail,
+        status: error.status,
+        type: error.type,
+        title: error.title,
+        stack: error.stack,
+      });
       
-      // Re-throw custom errors
+      // CRITICAL: Re-throw custom errors as-is to preserve status codes and error details
+      // This ensures that errors from the bank (wrong credentials, etc.) are properly propagated
       if (error.status && error.type) {
+        console.error("❌ [AMERIA PAYMENT] Re-throwing payment error with original status:", {
+          status: error.status,
+          type: error.type,
+          title: error.title,
+          detail: error.detail,
+        });
         throw error;
       }
 
+      // Wrap unexpected errors
       throw {
         status: 500,
         type: "payment_init_error",
@@ -421,6 +437,22 @@ class AmeriaPaymentService {
                      paymentDetails.PaymentState === "Successful" &&
                      paymentDetails.OrderStatus === 2;
 
+      // DEBUG: Log configuration state for troubleshooting
+      console.log("🔍 [AMERIA PAYMENT] DEBUG - Configuration state:", {
+        paymentId,
+        orderId: order.number,
+        testMode: config.testMode,
+        testCardStrictMode: config.testCardStrictMode,
+        allowedTestCards: config.allowedTestCards,
+        allowedTestCardsLength: config.allowedTestCards?.length || 0,
+        cardNumber: paymentDetails.CardNumber,
+        responseCode: paymentDetails.ResponseCode,
+        paymentState: paymentDetails.PaymentState,
+        orderStatus: paymentDetails.OrderStatus,
+        isSuccess: isSuccess,
+        willValidate: isSuccess && config.testMode,
+      });
+
       // CRITICAL: In test mode, validate test card number BEFORE accepting payment
       // This matches the PHP pattern where validation happens after ResponseCode check
       // Only bank-provided test cards should be accepted
@@ -472,6 +504,13 @@ class AmeriaPaymentService {
             allowedCards: config.allowedTestCards || [],
           });
         }
+      } else if (isSuccess && !config.testMode) {
+        // DEBUG: Log when test mode is disabled
+        console.log("ℹ️ [AMERIA PAYMENT] DEBUG - Test mode is disabled, skipping card validation:", {
+          paymentId,
+          orderId: order.number,
+          testMode: config.testMode,
+        });
       } else if (isSuccess && config.testMode && (!config.allowedTestCards || config.allowedTestCards.length === 0)) {
         // Warning: Test mode enabled but no test cards configured
         console.warn("⚠️ [AMERIA PAYMENT] Test mode enabled but no allowed test cards configured", {

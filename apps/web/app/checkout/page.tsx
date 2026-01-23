@@ -690,7 +690,22 @@ export default function CheckoutPage() {
         paymentMethod: data.paymentMethod,
       });
 
-      console.log('[Checkout] Order created:', response.order.number);
+      console.log('[Checkout] Order created successfully:', {
+        orderNumber: response.order.number,
+        paymentUrl: response.payment?.paymentUrl,
+        nextAction: response.nextAction,
+      });
+
+      // CRITICAL: For Ameria Bank payments, paymentUrl MUST be present
+      // If paymentUrl is null/undefined, it means payment initialization failed
+      // This should never happen if error handling is correct, but we check anyway
+      if (data.paymentMethod === 'ameria' && !response.payment?.paymentUrl) {
+        console.error('[Checkout] CRITICAL: Ameria payment selected but paymentUrl is missing!', {
+          response,
+          paymentMethod: data.paymentMethod,
+        });
+        throw new Error(t('checkout.errors.paymentInitFailed') || 'Payment initialization failed. Please try again or choose another payment method.');
+      }
 
       // Clear guest cart after successful checkout
       if (!isLoggedIn) {
@@ -976,7 +991,7 @@ export default function CheckoutPage() {
                       {...register('paymentMethod')}
                       value={method.id}
                       checked={paymentMethod === method.id}
-                      onChange={(e) => setValue('paymentMethod', e.target.value)}
+                      onChange={(e) => setValue('paymentMethod', e.target.value as 'ameria' | 'cash_on_delivery')}
                       className="mr-4"
                       disabled={isSubmitting}
                     />

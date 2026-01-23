@@ -1,0 +1,310 @@
+{
+	"info": {
+		"_postman_id": "ameria-bank-api-collection",
+		"name": "Ameria Bank API Tests",
+		"description": "Complete collection for testing Ameria Bank vPOS API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. InitPayment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Auto-save PaymentID to environment",
+							"if (pm.response.code === 200) {",
+							"    const jsonData = pm.response.json();",
+							"    if (jsonData.PaymentID) {",
+							"        pm.environment.set(\"payment_id\", jsonData.PaymentID);",
+							"        console.log(\"✅ PaymentID saved:\", jsonData.PaymentID);",
+							"    }",
+							"}",
+							"",
+							"// Auto-generate unique OrderID",
+							"pm.environment.set(\"order_id\", Date.now());",
+							"",
+							"// Test response",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"ResponseCode is 1 (Success)\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.ResponseCode).to.eql(1);",
+							"});",
+							"",
+							"pm.test(\"ResponseMessage is OK\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.ResponseMessage).to.eql(\"OK\");",
+							"});",
+							"",
+							"pm.test(\"PaymentID exists\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"PaymentID\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ClientID\": \"{{client_id}}\",\n  \"Username\": \"{{username}}\",\n  \"Password\": \"{{password}}\",\n  \"OrderID\": {{order_id}},\n  \"Amount\": 100,\n  \"Currency\": \"051\",\n  \"BackURL\": \"{{back_url}}\",\n  \"Description\": \"Test payment from Postman\",\n  \"Opaque\": \"test-order-{{order_id}}\",\n  \"Timeout\": 1200\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/VPOS/InitPayment",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"VPOS",
+						"InitPayment"
+					]
+				},
+				"description": "Initialize a payment transaction. Creates a payment session and returns PaymentID.\n\n**Important:**\n- OrderID must be unique for each request\n- Minimum amount in test mode: 10 AMD\n- Currency codes: 051=AMD, 978=EUR, 840=USD, 643=RUB\n- Success: ResponseCode = 1, ResponseMessage = \"OK\""
+			},
+			"response": []
+		},
+		{
+			"name": "2. GetPaymentDetails",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test response",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"ResponseCode is 00 (Success)\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.ResponseCode).to.eql(\"00\");",
+							"});",
+							"",
+							"pm.test(\"PaymentID exists\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"PaymentID\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Username\": \"{{username}}\",\n  \"Password\": \"{{password}}\",\n  \"PaymentID\": \"{{payment_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/VPOS/GetPaymentDetails",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"VPOS",
+						"GetPaymentDetails"
+					]
+				},
+				"description": "Get payment details by PaymentID. Used to verify payment status after callback.\n\n**Important:**\n- ClientID is NOT required in this request\n- PaymentID should be from InitPayment response\n- Success: ResponseCode = \"00\""
+			},
+			"response": []
+		},
+		{
+			"name": "3. RefundPayment (Full)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test response",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"ResponseCode is 00 (Success)\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.ResponseCode).to.eql(\"00\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PaymentID\": \"{{payment_id}}\",\n  \"Username\": \"{{username}}\",\n  \"Password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/VPOS/RefundPayment",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"VPOS",
+						"RefundPayment"
+					]
+				},
+				"description": "Refund a payment (full refund).\n\n**Important:**\n- If Amount is not provided, full refund is performed\n- Success: ResponseCode = \"00\""
+			},
+			"response": []
+		},
+		{
+			"name": "4. RefundPayment (Partial)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test response",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"ResponseCode is 00 (Success)\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.ResponseCode).to.eql(\"00\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PaymentID\": \"{{payment_id}}\",\n  \"Username\": \"{{username}}\",\n  \"Password\": \"{{password}}\",\n  \"Amount\": 50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/VPOS/RefundPayment",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"VPOS",
+						"RefundPayment"
+					]
+				},
+				"description": "Refund a payment (partial refund).\n\n**Important:**\n- Amount specifies the refund amount\n- Success: ResponseCode = \"00\""
+			},
+			"response": []
+		},
+		{
+			"name": "5. CancelPayment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test response",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"ResponseCode is 00 (Success)\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.ResponseCode).to.eql(\"00\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PaymentID\": \"{{payment_id}}\",\n  \"Username\": \"{{username}}\",\n  \"Password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/VPOS/CancelPayment",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"VPOS",
+						"CancelPayment"
+					]
+				},
+				"description": "Cancel a pending payment.\n\n**Important:**\n- Can only cancel payments within 72 hours after payment completion\n- Success: ResponseCode = \"00\""
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://servicestest.ameriabank.am/VPOS",
+			"type": "string"
+		}
+	]
+}
+

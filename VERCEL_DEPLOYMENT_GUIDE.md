@@ -121,3 +121,5 @@ npx prisma migrate deploy
 2. Ստուգեք environment variables-ները
 3. Ստուգեք, որ database-ը accessible է
 
+
+
