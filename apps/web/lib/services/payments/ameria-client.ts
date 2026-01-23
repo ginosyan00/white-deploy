@@ -603,10 +603,15 @@ export class AmeriaClient {
   /**
    * Convert currency code to Ameria Bank ISO format
    * 
-   * @param currency Currency code (AMD, EUR, USD, RUB, etc.)
+   * @param currency Currency code (AMD, EUR, USD, RUB, etc.) or ISO code (051, 978, etc.)
    * @returns ISO currency code (051=AMD, 978=EUR, 840=USD, 643=RUB)
    */
   private getCurrencyCode(currency: string): string {
+    // If already in ISO format (3 digits), return as is
+    if (/^\d{3}$/.test(currency)) {
+      return currency;
+    }
+
     const currencyMap: Record<string, string> = {
       'AMD': '051',
       'EUR': '978',

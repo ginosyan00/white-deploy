@@ -51,6 +51,17 @@ REDIS_URL="redis://localhost:6379"
 
 ### Payment Gateways
 
+#### Ameria Bank
+```bash
+# Optional: For testing purposes only
+# Recommended: Use database configuration via admin panel instead
+AMERIA_CLIENT_ID="your-ameriabank-client-id"
+AMERIA_USERNAME="your-ameriabank-username"
+AMERIA_PASSWORD="your-ameriabank-password"
+AMERIA_TEST_MODE="true"  # Set to "true" for test environment, "false" for production
+```
+**Note:** These variables are optional and only used if credentials are not provided in the request and database configuration is not available. **For production, it's recommended to use database configuration** (configured via `/admin/payments`) which stores credentials encrypted.
+
 #### Idram
 ```bash
 IDRAM_MERCHANT_ID="your-idram-merchant-id"
